@@ -95,6 +95,13 @@ const SKILL_ICONS = {
   "Visual Studio Code": "icon-vscode"
 };
 
+// Brand marks kept as standalone asset files (full official artwork, e.g. gradients)
+// instead of the sprite, so they render pixel-for-pixel like the source logo.
+const SKILL_ICON_ASSETS = {
+  "Microsoft Azure": "/assets/icons/azureLogo.svg",
+  "Azure App Services": "/assets/icons/azureLogo.svg"
+};
+
 const LEARNING_ICONS = {
   "Docker": "icon-docker",
   "Cisco CCNA": "icon-cisco",
@@ -114,10 +121,21 @@ const createSpriteIcon = (symbolId, className) => {
   return svg;
 };
 
+const createAssetIcon = (src, className) => {
+  const img = document.createElement("img");
+  img.className = className;
+  img.src = src;
+  img.alt = "";
+  img.decoding = "async";
+  return img;
+};
+
 const createSkillTag = (label) => {
   const tag = createElement("span", "tag");
+  const assetSrc = SKILL_ICON_ASSETS[label];
   const symbolId = SKILL_ICONS[label];
-  if (symbolId) tag.append(createSpriteIcon(symbolId, "tag-icon"));
+  if (assetSrc) tag.append(createAssetIcon(assetSrc, "tag-icon"));
+  else if (symbolId) tag.append(createSpriteIcon(symbolId, "tag-icon"));
   tag.append(document.createTextNode(label));
   return tag;
 };

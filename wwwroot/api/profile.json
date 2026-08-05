@@ -134,6 +134,11 @@
       "items": ["TCP/IP Fundamentals", "Computer Networking", "CCNA preparation"]
     },
     {
+      "name": "Cloud",
+      "icon": "AZ",
+      "items": ["Microsoft Azure", "Azure App Services", "Cloud Fundamentals", "Deployment & Hosting"]
+    },
+    {
       "name": "Tools",
       "icon": "Git",
       "items": ["Git", "GitHub", "Pull Requests", "Code Reviews", "gdb", "Valgrind", "Virtual Machines", "Agile/Scrum", "Visual Studio", "Visual Studio Code"]
