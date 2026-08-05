@@ -10,11 +10,7 @@ The project showcases my software engineering work, technical skills, academic b
 
 ## Preview
 
-> Add a screenshot of your homepage here.
-
-```text
 ![Portfolio Preview](docs/preview.png)
-```
 
 ---
 
