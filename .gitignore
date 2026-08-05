@@ -1,11 +1,26 @@
+# Build output
 bin/
 obj/
+
+# IDE
 .vs/
 .vscode/
+
+# AI assistants
+.claude/
+.codex/
+
+# .NET temporary files
+.dotnet_tmp/
+
+# User-specific files
 *.user
 *.suo
+
+# Temporary files
 *.swp
 *.tmp
 *.log
+
+# macOS
 .DS_Store
-.dotnet_tmp/
