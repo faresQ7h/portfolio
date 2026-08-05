@@ -1,6 +1,6 @@
 # Fares Mohamed Portfolio
 
-A production-ready personal portfolio built with **ASP.NET Core 8**, **C#**, **HTML**, **CSS**, and **vanilla JavaScript**.
+A production-ready personal portfolio built with **ASP.NET Core 10**, **C#**, **HTML**, **CSS**, and **vanilla JavaScript**.
 
 The project showcases my software engineering work, technical skills, academic background, and personal projects while demonstrating modern backend development, responsive frontend design, REST APIs, and maintainable application architecture.
 
@@ -33,7 +33,7 @@ All portfolio content is stored in JSON files, allowing projects, education, exp
 # Features
 
 - Responsive design for desktop, tablet, and mobile
-- ASP.NET Core 8 backend
+- ASP.NET Core 10 backend
 - REST API endpoints
 - JSON-driven content management
 - Dynamic project detail pages
@@ -49,7 +49,7 @@ All portfolio content is stored in JSON files, allowing projects, education, exp
 
 ### Backend
 
-- ASP.NET Core 8
+- ASP.NET Core 10
 - C#
 - REST APIs
 - JSON
