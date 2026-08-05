@@ -1,49 +1,175 @@
 # Fares Mohamed Portfolio
 
-Production-ready personal portfolio built with ASP.NET Core 8, C#, HTML, CSS, and vanilla JavaScript.
+A production-ready personal portfolio built with **ASP.NET Core 8**, **C#**, **HTML**, **CSS**, and **vanilla JavaScript**.
 
-## Structure
+The project showcases my software engineering work, technical skills, academic background, and personal projects while demonstrating modern backend development, responsive frontend design, REST APIs, and maintainable application architecture.
 
-- `Controllers/` exposes REST endpoints for profile and projects.
-- `Models/` contains typed DTOs used by the API.
-- `Services/` reads JSON portfolio data from static files.
-- `wwwroot/api/profile.json` stores editable profile, education, experience, learning, and skill data.
-- `wwwroot/api/projects.json` stores editable project cards and detail pages.
-- `wwwroot/assets/` is the single home for every image asset (project screenshots, icons, the profile photo,
-  and the SVG illustrations used as fallbacks for projects with no screenshots). A project's screenshots live in
-  their own subfolder, e.g. `wwwroot/assets/minishell/`.
-- `wwwroot/css` and `wwwroot/js` contain the frontend.
-- `wwwroot/files/Fares_Mohamed_CV.pdf` is used by the Download CV button.
+🌐 **Live Demo:** https://your-domain.com *(Update after deployment)*
 
-## Local Development
+---
+
+## Preview
+
+> Add a screenshot of your homepage here.
+
+```text
+preview.png
+```
+
+---
+
+# About
+
+This portfolio was designed as more than a static website. It serves as a production-style web application that demonstrates software engineering practices including:
+
+- ASP.NET Core MVC architecture
+- REST API development
+- JSON-driven content management
+- Responsive and mobile-first UI
+- Dynamic project pages
+- SEO optimization
+- Clean and maintainable code structure
+
+All portfolio content is stored in JSON files, allowing projects, education, experience, and skills to be updated without modifying the frontend.
+
+---
+
+# Features
+
+- Responsive design for desktop, tablet, and mobile
+- ASP.NET Core 8 backend
+- REST API endpoints
+- JSON-driven content management
+- Dynamic project detail pages
+- Automatic image galleries
+- SEO-friendly metadata
+- Sitemap and robots.txt
+- Clean component-based frontend
+- Lightweight and dependency-free JavaScript
+
+---
+
+# Technologies
+
+### Backend
+
+- ASP.NET Core 8
+- C#
+- REST APIs
+- JSON
+
+### Frontend
+
+- HTML5
+- CSS3
+- JavaScript (ES6)
+
+### Development
+
+- Git
+- GitHub
+- Linux
+- Visual Studio Code
+
+### Deployment
+
+- Nginx
+- systemd
+- HTTPS (Certbot)
+
+---
+
+# Project Structure
+
+```
+Controllers/        ASP.NET API endpoints
+Models/             Data transfer objects (DTOs)
+Services/           JSON data services
+
+wwwroot/
+├── api/            Portfolio and project data
+├── assets/         Images, screenshots, icons
+├── css/            Stylesheets
+├── files/          Downloadable files
+└── js/             Frontend JavaScript
+```
+
+### Data
+
+- `wwwroot/api/profile.json`
+  - Personal information
+  - Education
+  - Experience
+  - Skills
+  - Learning roadmap
+
+- `wwwroot/api/projects.json`
+  - Project cards
+  - Project detail pages
+  - Technologies
+  - Screenshot galleries
+
+---
+
+# Local Development
+
+Restore dependencies:
 
 ```bash
 DOTNET_CLI_HOME=/tmp/dotnet DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 dotnet restore --ignore-failed-sources
+```
+
+Run the application:
+
+```bash
 DOTNET_CLI_HOME=/tmp/dotnet DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 dotnet run
 ```
 
-Open the URL printed by `dotnet run`, usually `http://localhost:5088`.
+Open the URL displayed in the terminal (typically):
 
-## Editing Projects
+```
+http://localhost:5088
+```
 
-Add or update projects only in `wwwroot/api/projects.json`. Each project needs a stable `slug`; the detail page is available at `/projects/{slug}`.
+---
 
-To give a project a real screenshot gallery, drop images (`.png`, `.jpg`, `.jpeg`, `.webp`, or `.gif`) into a folder
-under `wwwroot/assets/` (e.g. `wwwroot/assets/my-project/`) and set that project's `screenshots` field in
-`projects.json` to the folder path with a trailing slash, e.g. `"screenshots": ["/assets/my-project/"]`. The
-`/api/assets/{folder}` endpoint (`Program.cs`) lists every image file in that folder at request time, so the detail
-page gallery always reflects whatever is currently in the folder — add or remove images later with no code changes.
-Projects with no screenshots fall back to `/assets/projects/placeholder.svg`.
+# Managing Projects
 
-## Deployment: Linux + ASP.NET + Nginx + HTTPS
+Projects are completely data-driven.
 
-1. Publish the app:
+To add or edit a project:
+
+1. Update `wwwroot/api/projects.json`
+2. Give every project a unique `slug`
+3. Add screenshots under:
+
+```
+wwwroot/assets/my-project/
+```
+
+Then reference the folder:
+
+```json
+"screenshots": [
+    "/assets/my-project/"
+]
+```
+
+The application automatically discovers every image inside the folder through the `/api/assets/{folder}` endpoint, allowing screenshots to be added or removed without changing any code.
+
+Projects without screenshots automatically display the built-in placeholder illustration.
+
+---
+
+# Deployment
+
+Publish the application:
 
 ```bash
 dotnet publish -c Release -o /var/www/fares-portfolio
 ```
 
-2. Create a systemd service at `/etc/systemd/system/fares-portfolio.service`:
+Create the systemd service:
 
 ```ini
 [Unit]
@@ -58,6 +184,7 @@ RestartSec=10
 KillSignal=SIGINT
 SyslogIdentifier=fares-portfolio
 User=www-data
+
 Environment=ASPNETCORE_ENVIRONMENT=Production
 Environment=ASPNETCORE_URLS=http://127.0.0.1:5000
 
@@ -65,7 +192,7 @@ Environment=ASPNETCORE_URLS=http://127.0.0.1:5000
 WantedBy=multi-user.target
 ```
 
-3. Enable and start:
+Enable the service:
 
 ```bash
 sudo systemctl daemon-reload
@@ -73,7 +200,7 @@ sudo systemctl enable fares-portfolio
 sudo systemctl start fares-portfolio
 ```
 
-4. Configure Nginx:
+Configure Nginx:
 
 ```nginx
 server {
@@ -83,24 +210,59 @@ server {
     location / {
         proxy_pass http://127.0.0.1:5000;
         proxy_http_version 1.1;
+
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection keep-alive;
         proxy_set_header Host $host;
+
         proxy_cache_bypass $http_upgrade;
+
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 }
 ```
 
-5. Add HTTPS with Certbot:
+Enable HTTPS:
 
 ```bash
 sudo certbot --nginx -d your-domain.com
 ```
 
-Before going live, replace `https://example.com` in `wwwroot/index.html`, `wwwroot/robots.txt`, and `wwwroot/sitemap.xml` with the production domain.
+Before deployment, replace every occurrence of:
 
-## Contact
+```
+https://example.com
+```
 
-The site has no contact form. Use the `Connect with me` section on the homepage to reach out via email, GitHub, or LinkedIn.
+with your production domain inside:
+
+- `wwwroot/index.html`
+- `wwwroot/robots.txt`
+- `wwwroot/sitemap.xml`
+
+---
+
+# Future Improvements
+
+- Docker deployment
+- CI/CD with GitHub Actions
+- Azure App Service deployment
+- Custom domain
+- Analytics integration
+
+---
+
+# Contact
+
+Feel free to reach out through the portfolio website:
+
+- Email
+- LinkedIn
+- GitHub
+
+---
+
+## License
+
+This repository is intended to showcase my software engineering work and personal projects.
