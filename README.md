@@ -13,7 +13,7 @@ The project showcases my software engineering work, technical skills, academic b
 > Add a screenshot of your homepage here.
 
 ```text
-preview.png
+![Portfolio Preview](docs/preview.png)
 ```
 
 ---
