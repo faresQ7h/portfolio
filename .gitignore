@@ -8,3 +8,4 @@ obj/
 *.tmp
 *.log
 .DS_Store
+.dotnet_tmp/
