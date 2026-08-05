@@ -69,6 +69,7 @@ All portfolio content is stored in JSON files, allowing projects, education, exp
 
 ### Deployment
 
+- Microsoft Azure (App Service)
 - Nginx
 - systemd
 - HTTPS (Certbot)
@@ -159,6 +160,10 @@ Projects without screenshots automatically display the built-in placeholder illu
 
 # Deployment
 
+The live site is deployed on **Microsoft Azure App Service**.
+
+The steps below document an alternative self-hosted deployment (VPS with Nginx, systemd, and Certbot).
+
 Publish the application:
 
 ```bash
@@ -243,7 +248,6 @@ with your production domain inside:
 
 - Docker deployment
 - CI/CD with GitHub Actions
-- Azure App Service deployment
 - Custom domain
 - Analytics integration
 
