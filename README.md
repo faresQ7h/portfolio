@@ -250,17 +250,7 @@ with your production domain inside:
 - CI/CD with GitHub Actions
 - Custom domain
 - Analytics integration
-
----
-
-# Contact
-
-Feel free to reach out through the portfolio website:
-
-- Email
-- LinkedIn
-- GitHub
-
+  
 ---
 
 ## License
