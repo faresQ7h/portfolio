@@ -1,0 +1,142 @@
+{
+  "personal": {
+    "name": "Fares Mohamed",
+    "headline": "Informatics Student | Backend & Software Development | Systems Programming",
+    "summary": "I build software ranging from Linux systems programming in C to backend APIs, relational databases, desktop applications in C#/.NET, and full-stack web applications with ASP.NET. Currently studying Informatics at CZU and software engineering at 42 Prague.",
+    "location": "Prague, Czech Republic",
+    "email": "farisreda9945@gmail.com",
+    "phone": "+420 705 940 706",
+    "githubUrl": "https://github.com/faresQ7h",
+    "linkedInUrl": "https://www.linkedin.com/in/fares-mohamed-it/",
+    "avatarUrl": "/assets/fares-mohamed.jpg"
+  },
+  "stats": [
+    {
+      "value": "13",
+      "label": "Public GitHub repositories"
+    },
+    {
+      "value": "120/180",
+      "label": "ECTS credits completed"
+    },
+    {
+      "value": "1.45",
+      "label": "Academic average at CZU"
+    },
+    {
+      "value": "2027",
+      "label": "Expected BSc graduation"
+    }
+  ],
+  "about": [
+    "I am an Informatics student at the Czech University of Life Sciences Prague and a current student at 42 Prague, focused on writing reliable, maintainable software through practical, project-based learning rather than theory alone.",
+    "My strongest experience is in C systems programming, C#/.NET desktop development, PostgreSQL database design, and full-stack web development with ASP.NET, JavaScript, HTML, and CSS, applying object-oriented design, data structures, and software design principles to build software that behaves correctly under real constraints.",
+    "I am interested in backend engineering, systems programming, networking, cloud technologies, and automation. At the moment I am expanding into computer networking and Docker while preparing for the CCNA certification."
+  ],
+  "education": [
+    {
+      "school": "Czech University of Life Sciences Prague (CZU)",
+      "program": "Bachelor of Science in Informatics",
+      "period": "Expected graduation: 2027",
+      "details": "Entering my 3rd year with 120 / 180 ECTS credits completed, maintaining an excellent academic average of 1.45 on the CZU grading scale.",
+      "highlights": [
+        "Algorithms & Data Structures",
+        "Object-Oriented Programming",
+        "Database Systems",
+        "Operating Systems",
+        "Computer Networks",
+        "Computer Architecture",
+        "Software Development",
+        "Mathematical Logic"
+      ]
+    },
+    {
+      "school": "42 Prague",
+      "program": "Project-Based Software Engineering Program",
+      "period": "Expected completion: 2026–2027",
+      "details": "Peer-to-peer program focused on systems programming, Linux/Unix, algorithms, software architecture, debugging, and collaborative software development.",
+      "highlights": [
+        "C and C++ projects under strict coding standards",
+        "Memory management and edge-case handling",
+        "Peer review and Git-based collaboration",
+        "Debugging with gdb and Valgrind"
+      ]
+    }
+  ],
+  "experience": [
+    {
+      "title": "Project-based software engineering",
+      "organization": "42 Prague and personal projects",
+      "period": "Current",
+      "details": [
+        "Built Linux-based applications in C, including a Unix shell and projects focused on processes, memory, parsing, and low-level debugging.",
+        "Created a normalized PostgreSQL hotel booking database with schema constraints, sample data, and SQL queries.",
+        "Built a C#/.NET WinForms inventory application using object-oriented design and local JSON persistence."
+      ]
+    },
+    {
+      "title": "Academic software development",
+      "organization": "CZU Informatics",
+      "period": "2024 - 2027 expected",
+      "details": [
+        "Studied software development, algorithms, data structures, databases, operating systems, computer networks, and computer architecture.",
+        "Achieved excellent grades in Mathematics I and Mathematics II and received a professor recommendation for academic performance and analytical ability."
+      ]
+    }
+  ],
+  "currentlyLearning": [
+    {
+      "name": "Cisco CCNA",
+      "focus": "Networking fundamentals, TCP/IP, routing, switching, and network troubleshooting."
+    },
+    {
+      "name": "Docker",
+      "focus": "Containerizing applications and improving deployment workflows."
+    },
+    {
+      "name": "Cloud Computing",
+      "focus": "Cloud infrastructure fundamentals for backend and deployment work."
+    },
+    {
+      "name": "AI Workflow Automation",
+      "focus": "Using APIs, LLMs, and automation tools to design practical workflows."
+    }
+  ],
+  "skills": [
+    {
+      "name": "Programming Languages",
+      "icon": "{ }",
+      "items": ["C", "C++", "C#", "Python", "SQL", "JavaScript", "HTML", "CSS", "Bash"]
+    },
+    {
+      "name": "Frameworks",
+      "icon": ".NET",
+      "items": [".NET", "ASP.NET", "WinForms", "REST APIs", "JSON", "XML"]
+    },
+    {
+      "name": "Backend",
+      "icon": "API",
+      "items": ["Backend Development", "Client-Server Architecture", "RESTful APIs", "HTTP/HTTPS", "API Integration"]
+    },
+    {
+      "name": "Databases",
+      "icon": "DB",
+      "items": ["PostgreSQL", "Relational Database Design", "ER Modeling", "Normalization (3NF)", "Constraints & Data Integrity", "SQL Joins", "Aggregations", "Subqueries"]
+    },
+    {
+      "name": "Linux",
+      "icon": ">_",
+      "items": ["Linux Mint", "Linux/Unix", "POSIX", "Command-Line Tools", "Process Management", "File I/O", "Shell Scripting", "SSH"]
+    },
+    {
+      "name": "Networking",
+      "icon": "IP",
+      "items": ["TCP/IP Fundamentals", "Computer Networking", "CCNA preparation"]
+    },
+    {
+      "name": "Tools",
+      "icon": "Git",
+      "items": ["Git", "GitHub", "Pull Requests", "Code Reviews", "gdb", "Valgrind", "Virtual Machines", "Agile/Scrum", "Visual Studio", "Visual Studio Code"]
+    }
+  ]
+}

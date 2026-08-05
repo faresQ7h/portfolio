@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-label="Database schema preview">
+  <rect width="720" height="420" fill="#0b0d12"/>
+  <rect x="70" y="64" width="180" height="104" rx="8" fill="#11141b" stroke="#4da3ff"/>
+  <rect x="470" y="64" width="180" height="104" rx="8" fill="#11141b" stroke="#4da3ff"/>
+  <rect x="270" y="252" width="180" height="104" rx="8" fill="#11141b" stroke="#79d59a"/>
+  <path d="M250 116 H470 M360 168 V252" stroke="#747f91" stroke-width="4" fill="none"/>
+  <text x="160" y="118" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#f5f7fb">Guests</text>
+  <text x="560" y="118" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#f5f7fb">Rooms</text>
+  <text x="360" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#f5f7fb">Bookings</text>
+</svg>

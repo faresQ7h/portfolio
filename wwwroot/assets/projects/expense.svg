@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-label="Expense tracker preview">
+  <rect width="720" height="420" fill="#0b0d12"/>
+  <rect x="78" y="64" width="564" height="292" rx="8" fill="#11141b" stroke="#2a3342"/>
+  <rect x="116" y="104" width="188" height="72" rx="8" fill="#142438"/>
+  <rect x="336" y="104" width="188" height="72" rx="8" fill="#1d2430"/>
+  <rect x="116" y="222" width="460" height="18" rx="6" fill="#4da3ff"/>
+  <rect x="116" y="266" width="340" height="18" rx="6" fill="#79d59a"/>
+  <text x="142" y="149" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#f5f7fb">Balance</text>
+</svg>

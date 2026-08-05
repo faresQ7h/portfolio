@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-label="Fractal visualization preview">
+  <rect width="720" height="420" fill="#0b0d12"/>
+  <path d="M360 210 C280 60 100 110 136 246 C170 376 322 332 360 210 C398 332 550 376 584 246 C620 110 440 60 360 210Z" fill="#142438" stroke="#4da3ff" stroke-width="5"/>
+  <path d="M360 210 C322 150 260 178 278 236 C294 288 344 268 360 210 C376 268 426 288 442 236 C460 178 398 150 360 210Z" fill="#11141b" stroke="#79d59a" stroke-width="4"/>
+  <text x="360" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#f5f7fb">fract-ol</text>
+</svg>

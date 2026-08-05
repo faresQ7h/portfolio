@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-label="miniGPT chat preview">
+  <rect width="720" height="420" fill="#0b0d12"/>
+  <rect x="72" y="58" width="576" height="304" rx="8" fill="#11141b" stroke="#2a3342"/>
+  <rect x="106" y="106" width="300" height="48" rx="8" fill="#1d2430"/>
+  <rect x="314" y="178" width="260" height="48" rx="8" fill="#142438"/>
+  <rect x="106" y="250" width="340" height="48" rx="8" fill="#1d2430"/>
+  <text x="118" y="136" font-family="Arial, sans-serif" font-size="16" fill="#a7b0c0">Local model ready</text>
+  <text x="326" y="208" font-family="Arial, sans-serif" font-size="16" fill="#86c5ff">Ollama + memory</text>
+</svg>

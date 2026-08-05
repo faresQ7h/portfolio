@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-label="Inventory app preview">
+  <rect width="720" height="420" fill="#0b0d12"/>
+  <rect x="58" y="56" width="604" height="308" rx="8" fill="#11141b" stroke="#2a3342"/>
+  <rect x="58" y="56" width="160" height="308" rx="8" fill="#171b24"/>
+  <rect x="250" y="92" width="360" height="34" rx="6" fill="#1d2430"/>
+  <rect x="250" y="154" width="360" height="42" rx="6" fill="#142438"/><rect x="250" y="214" width="360" height="42" rx="6" fill="#1d2430"/><rect x="250" y="274" width="360" height="42" rx="6" fill="#1d2430"/>
+  <text x="92" y="116" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#86c5ff">Products</text>
+  <text x="92" y="162" font-family="Arial, sans-serif" font-size="18" fill="#a7b0c0">Orders</text>
+  <text x="92" y="208" font-family="Arial, sans-serif" font-size="18" fill="#a7b0c0">Customers</text>
+</svg>

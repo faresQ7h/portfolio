@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-label="Concurrency project preview">
+  <rect width="720" height="420" fill="#0b0d12"/>
+  <circle cx="360" cy="210" r="126" fill="#11141b" stroke="#2a3342" stroke-width="4"/>
+  <g fill="#142438" stroke="#4da3ff" stroke-width="3">
+    <circle cx="360" cy="80" r="36"/><circle cx="484" cy="170" r="36"/><circle cx="436" cy="318" r="36"/><circle cx="284" cy="318" r="36"/><circle cx="236" cy="170" r="36"/>
+  </g>
+  <text x="360" y="218" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#f5f7fb">sync</text>
+</svg>

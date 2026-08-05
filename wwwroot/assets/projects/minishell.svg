@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-label="Minishell terminal preview">
+  <rect width="720" height="420" fill="#0b0d12"/>
+  <rect x="56" y="52" width="608" height="316" rx="8" fill="#11141b" stroke="#2a3342"/>
+  <circle cx="86" cy="82" r="7" fill="#ff6b6b"/><circle cx="110" cy="82" r="7" fill="#ffd166"/><circle cx="134" cy="82" r="7" fill="#79d59a"/>
+  <rect x="82" y="122" width="280" height="14" rx="4" fill="#4da3ff"/><rect x="82" y="158" width="420" height="10" rx="4" fill="#747f91"/>
+  <rect x="82" y="190" width="500" height="10" rx="4" fill="#747f91"/><rect x="82" y="222" width="330" height="10" rx="4" fill="#747f91"/>
+  <text x="82" y="284" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#f5f7fb">$ minishell</text>
+  <text x="82" y="322" font-family="Arial, sans-serif" font-size="18" fill="#86c5ff">pipes | redirects | heredocs | signals</text>
+</svg>

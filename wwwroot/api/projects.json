@@ -1,0 +1,302 @@
+[
+  {
+    "slug": "minishell-42prague",
+    "name": "Minishell",
+    "description": "A POSIX-compliant Unix shell written in C from scratch, with a full lexer-parser-executor pipeline, pipes, redirections, and built-in commands.",
+    "technologies": ["C", "POSIX", "Linux", "Unix", "GNU Readline", "Git", "gdb", "Valgrind"],
+    "githubUrl": "https://github.com/faresQ7h/minishell-42Prague",
+    "screenshots": ["/assets/minishell/"],
+    "fallbackImage": "/assets/projects/minishell.svg",
+    "skillsDemonstrated": ["Systems Programming", "Linux", "Debugging", "Memory Management", "Git Collaboration"],
+    "status": "Completed",
+    "featured": true,
+    "overview": "Minishell is a Unix shell implemented from scratch in C as part of the 42 Prague curriculum, built with a partner under strict coding standards. It reproduces core Bash behavior end to end: an interactive prompt with command history via GNU Readline, a lexer and parser that turn raw input into an executable command structure, environment variable expansion, and a process-based executor that runs built-ins and external binaries.",
+    "architecture": "The codebase is split into a lexer/parser/expander pipeline (lexer.c, lexer_token.c, lexer_extract.c, parser.c, parser_utils.c, expander.c, expander_utils.c) that turns raw input into a structured command list, and an execution layer (executor.c, executor_utils.c, path_finder.c, redirections.c, heredoc.c, wait.c) that forks processes, wires up pipes and file descriptors, and waits on children. Built-in commands run in-process rather than being forked, and a dedicated environment layer (env.c, env_utils.c) manages the shell's variable list independently of the OS environment array. A custom libft utility library backs the string and memory helpers used throughout.",
+    "keyFeatures": [
+      "Interactive prompt with command history via GNU Readline",
+      "Lexer and parser that tokenize and structure raw input, including quote handling",
+      "Pipelines (|) and multi-command chaining through process creation",
+      "Redirections (<, >, >>) and heredocs (<<) with delimiter support",
+      "Built-in commands: echo, cd, pwd, env, export, unset, exit",
+      "Environment variable ($VAR) expansion with an independently managed environment list",
+      "Signal handling that adapts to interactive mode, heredoc input, and child execution"
+    ],
+    "challenges": [
+      "Reproducing Bash-like parsing and expansion behavior without access to Bash's own source or internal state",
+      "Managing file descriptors and process lifetimes correctly across pipelines, redirections, and heredocs so nothing leaked or closed early",
+      "Handling signals differently depending on shell state: interactive prompt, heredoc input, or a running child process"
+    ],
+    "engineeringDecisions": [
+      "Separated the shell's environment state (env.c) from the OS environment array so built-ins like export and unset can mutate it without exec() side effects",
+      "Kept built-ins running in the parent process instead of forking, since commands like cd and export must affect the shell's own state, not a child's",
+      "Split lexing, parsing, and expansion into distinct passes instead of one large parser function, making quote handling and $VAR expansion easier to reason about and test in isolation"
+    ],
+    "technologyNotes": "Written in C targeting Linux/Unix, using POSIX system calls (fork, execve, waitpid, dup2, pipe) for process and file-descriptor control, GNU Readline for interactive input and history, and a custom libft utility library for string and memory helpers.",
+    "lessonsLearned": [
+      "Strengthened low-level debugging skills using gdb and Valgrind to track down descriptor leaks and memory issues",
+      "Learned to validate shell behavior empirically against real Bash rather than assumptions",
+      "Practiced Git-based collaboration on a shared, peer-reviewed C codebase under strict coding-standard constraints"
+    ]
+  },
+  {
+    "slug": "hotel-booking-database",
+    "name": "Hotel Booking Database",
+    "description": "A normalized PostgreSQL database for hotel booking management, with trigger-driven price recalculation and automatic booking-status transitions.",
+    "technologies": ["PostgreSQL", "SQL", "PL/pgSQL", "ER Modeling"],
+    "githubUrl": "https://github.com/faresQ7h/hotel-booking-system-database",
+    "screenshots": ["/assets/HotelBokking_DB/"],
+    "fallbackImage": "/assets/projects/database.svg",
+    "skillsDemonstrated": ["Database Design", "SQL", "Data Integrity"],
+    "status": "Completed",
+    "featured": true,
+    "overview": "A relational database system for managing bookings across multiple hotels, designed from a conceptual ER model through to a working PostgreSQL schema. It models hotels, rooms with per-room bed configurations, customers, price plans, multi-room bookings, payments, and hotel-specific extra services, with the schema itself, not just application code, responsible for keeping booking totals, room counts, and booking status correct as data changes.",
+    "architecture": "The schema is organized around 13 tables in third normal form, connected through primary and composite foreign-key relationships, for example Room is keyed by (hotel_id, number) and referenced compositely by Beds_in_room and Booking_item. Business logic that needs to run no matter which client touches the data, total price calculation, booking-status transitions, and service-usage validation, is implemented as PL/pgSQL functions and triggers rather than left to application code, so the database itself enforces consistency.",
+    "keyFeatures": [
+      "Multi-hotel, multi-room bookings with per-room bed-type configuration",
+      "Automatic booking total-price recalculation via triggers whenever booking items or extra services are inserted, updated, or deleted",
+      "Automatic booking-status transitions driven by payment events",
+      "CHECK-constraint-enforced business rules: positive prices, valid check-in/check-out ranges, adult-only customers, 1-5 star ratings",
+      "Flexible price plans and hotel-specific extra services with optional per-booking usage limits",
+      "Payment tracking across multiple methods and statuses (pending, succeed, failed, refunded, under review)"
+    ],
+    "challenges": [
+      "Keeping a booking's total price correct automatically as its rooms and extra services change, without relying on the application layer to recompute it",
+      "Modeling composite relationships correctly, since rooms are identified by hotel plus room number rather than a single surrogate key, across every dependent table",
+      "Writing set-based queries, such as customers with confirmed bookings or bookings using every extra service a hotel offers, using correlated subqueries and set operators instead of procedural loops"
+    ],
+    "engineeringDecisions": [
+      "Pushed price and status consistency into PL/pgSQL functions and triggers instead of application code, so the guarantee holds no matter what inserts or updates the data",
+      "Used composite foreign keys (hotel_id, room_number) rather than a synthetic room ID, since a room only makes sense in the context of its hotel",
+      "Modeled extra services and their usage limits per hotel rather than globally, since two hotels can define the same service differently"
+    ],
+    "technologyNotes": "PostgreSQL as the database engine, with the schema, constraints, and business logic written directly in SQL and PL/pgSQL rather than an ORM, to practice relational modeling and set-based query writing directly.",
+    "lessonsLearned": [
+      "Deepened understanding of relational modeling and normalization beyond textbook examples, including when composite keys are the right choice",
+      "Learned to express business rules as constraints and triggers so the schema stays correct independent of the application",
+      "Practiced writing SQL well beyond basic CRUD: correlated subqueries, EXISTS/NOT EXISTS, and set operators like EXCEPT"
+    ]
+  },
+  {
+    "slug": "business-inventory-management",
+    "name": "Business Inventory Management",
+    "description": "A C# WinForms desktop application for managing products, customers, and orders for a small business, with local persistence and a live business-stats dashboard.",
+    "technologies": ["C#", ".NET", "WinForms", "JSON"],
+    "githubUrl": "https://github.com/faresQ7h/business-inventory-management-app-winforms-csharp",
+    "screenshots": ["/assets/Inventory_managment_winformApp/"],
+    "fallbackImage": "/assets/projects/inventory.svg",
+    "skillsDemonstrated": ["Desktop Development", "OOP", "Software Design"],
+    "status": "Completed",
+    "featured": true,
+    "overview": "A Windows desktop application built with C# and WinForms for managing the day-to-day inventory operations of a small business, tracking products, customers, and orders behind a login-protected interface. The home dashboard surfaces live business stats, delivered versus undelivered orders and monthly profit, plus upcoming deliveries, and a dedicated reporting view lets the user review stored records.",
+    "architecture": "The application follows an event-driven WinForms structure with a login screen gating access to the main dashboard, and a sidebar-navigated interface (Home, Products, Customers, Orders, Reports) built from separate, modular forms per business area. Rather than a database engine, application state is persisted locally as JSON under the user's Windows AppData folder, created automatically on first run, keeping the application self-contained with no external server dependency.",
+    "keyFeatures": [
+      "Login-protected access with a change-password flow",
+      "Product, customer, and order management: add, edit, delete, view",
+      "Home dashboard with live business statistics: delivered/undelivered orders and monthly profit",
+      "Upcoming-deliveries view for the current month",
+      "Reporting screen for reviewing stored business data",
+      "Fully local, offline data persistence with no server or internet connection required"
+    ],
+    "challenges": [
+      "Keeping inventory quantities, order status, and computed stats like monthly profit consistent as products, customers, and orders are added, edited, or deleted independently",
+      "Structuring the local data layer so it survives application restarts without a database engine, while staying predictable to read and write from multiple forms"
+    ],
+    "engineeringDecisions": [
+      "Separated the UI event handlers in each WinForms form from the underlying business logic and data-access code, so operations like computing monthly profit aren't duplicated across screens",
+      "Stored data locally under the OS-managed AppData directory instead of a bundled database file, matching how small single-user Windows desktop tools are typically distributed"
+    ],
+    "technologyNotes": "C# and Windows Forms (.NET) for the desktop UI and event-driven application logic, with local JSON files used for persistence instead of a database engine, keeping the application self-contained and easy to distribute as a single executable.",
+    "lessonsLearned": [
+      "Practiced separating UI event handling from reusable business logic in a WinForms application",
+      "Gained experience with event-driven desktop application design end to end, from login to reporting",
+      "Learned how early persistence decisions, flat local files versus a database, shape how much rework is needed as an application grows"
+    ]
+  },
+  {
+    "slug": "philosophers-42prague",
+    "name": "Philosophers",
+    "description": "A multithreaded C simulation of the Dining Philosophers problem, using POSIX threads and mutexes to prevent deadlocks while enforcing strict timing constraints.",
+    "technologies": ["C", "POSIX Threads", "Linux"],
+    "githubUrl": "https://github.com/faresQ7h/philosophers-42Prague",
+    "screenshots": ["/assets/philosophers/"],
+    "fallbackImage": "/assets/projects/philosophers.svg",
+    "skillsDemonstrated": ["Concurrency", "Systems Programming", "Debugging"],
+    "status": "Completed",
+    "featured": false,
+    "overview": "An implementation of the classic Dining Philosophers concurrency problem in C using POSIX threads, where each philosopher runs as its own thread alternating between thinking, eating, and sleeping while sharing a fixed number of forks with its neighbors. The simulation enforces strict timing rules, a philosopher who doesn't eat before a configurable time-to-die limit is detected as dead, so correctness depends as much on precise timing as on avoiding deadlocks and race conditions.",
+    "architecture": "Each philosopher runs on its own pthread executing a shared routine that cycles through thinking, taking two fork mutexes, eating, releasing them, and sleeping. A separate monitor thread runs concurrently, checking every philosopher's last-meal timestamp against the time-to-die limit to detect starvation without interrupting the eating threads. A dedicated timing helper breaks sleep calls into short intervals so the monitor can still detect a death promptly instead of oversleeping past the deadline.",
+    "keyFeatures": [
+      "Independent philosopher threads synchronized with per-fork mutexes to prevent two neighbors eating with the same fork at once",
+      "Dedicated monitor thread that detects philosopher death based on a configurable time-to-die limit",
+      "Optional meal-count limit so the simulation can end once every philosopher has eaten enough times",
+      "Millisecond-precision timing via a custom sleep helper to avoid missing the death deadline"
+    ],
+    "challenges": [
+      "Preventing deadlock when every philosopher tries to pick up forks at once, without serializing them so heavily that the simulation stops behaving concurrently",
+      "Detecting a philosopher's death within the required timing precision without a busy-wait loop burning CPU or a long sleep call missing the deadline",
+      "Protecting shared state, last meal time and the death flag, from race conditions between each philosopher thread and the monitor thread"
+    ],
+    "engineeringDecisions": [
+      "Used a dedicated monitor thread instead of having each philosopher check its own death condition, since a philosopher blocked waiting for a fork can't reliably watch its own clock",
+      "Broke long sleeps into short intervals rather than a single sleep call, trading a small amount of CPU overhead for the timing precision the monitor depends on",
+      "Guarded shared timing state with mutexes rather than atomics, keeping the synchronization model consistent with the rest of the fork-locking design"
+    ],
+    "technologyNotes": "C with POSIX threads (pthread) and mutexes for concurrency, built and tested on Linux.",
+    "lessonsLearned": [
+      "Built a practical understanding of thread synchronization and the classic deadlock/starvation trade-offs beyond the textbook description",
+      "Learned how much correctness in a real-time-constrained concurrent system depends on timing precision, not just locking correctness",
+      "Practiced isolating shared mutable state and reasoning carefully about which thread is allowed to touch it and when"
+    ]
+  },
+  {
+    "slug": "fract-ol-42-project",
+    "name": "fract-ol",
+    "description": "An interactive C fractal renderer for the Mandelbrot and Julia sets, with real-time zoom and colored iteration rendering built on MiniLibX.",
+    "technologies": ["C", "MiniLibX", "X11", "Linux"],
+    "githubUrl": "https://github.com/faresQ7h/fract-ol-42-project",
+    "screenshots": ["/assets/fract-ol/"],
+    "fallbackImage": "/assets/projects/fractol.svg",
+    "skillsDemonstrated": ["Graphics Programming", "Mathematical Logic", "Input Handling"],
+    "status": "Completed",
+    "featured": false,
+    "overview": "A graphical C program that renders the Mandelbrot and Julia sets interactively, using MiniLibX only for window creation and input events. All fractal math, zooming, panning, and coloring is implemented directly in program logic rather than relying on a graphics library's built-ins. The program supports both macOS and Linux by bundling platform-specific MiniLibX backends.",
+    "architecture": "The code is organized by responsibility: argument parsing and validation select the fractal type and, for Julia, the complex seed; a shared iteration module implements the escape-time algorithm used by both fractals; a color module maps iteration counts to pixel colors; a render module draws the resulting frame; and an event-hook module wires up MiniLibX input (mouse scroll, keyboard, clicks) to trigger recomputation and redraw. A custom libftprintf utility library is used for formatted output.",
+    "keyFeatures": [
+      "Mandelbrot and Julia set rendering from a shared iteration engine",
+      "Smooth real-time zooming via mouse scroll or +/- keys",
+      "Adjustable Julia seed values passed as command-line arguments",
+      "Mouse-click reset back to the initial view",
+      "Cross-platform support for Linux (X11) and macOS via bundled MiniLibX backends"
+    ],
+    "challenges": [
+      "Keeping zooming and panning responsive by recomputing only what's needed rather than the whole image on every frame, since the escape-time calculation is inherently per-pixel and CPU-bound",
+      "Supporting both Linux and macOS from the same codebase, given their different MiniLibX implementations, X11-based on Linux versus OpenGL-based on macOS"
+    ],
+    "engineeringDecisions": [
+      "Shared a single iteration function between the Mandelbrot and Julia renderers, since both are the same escape-time algorithm with a different starting condition, instead of duplicating the math",
+      "Kept MiniLibX strictly to window and event handling and did all rendering logic in program code, to stay in control of performance and correctness rather than relying on library internals"
+    ],
+    "technologyNotes": "C with MiniLibX for windowing and event handling on both Linux (X11) and macOS, plus a custom libft-style printf implementation for output.",
+    "lessonsLearned": [
+      "Practiced translating a mathematical algorithm, complex-plane escape-time iteration, into an efficient, interactive rendering loop",
+      "Gained experience handling low-level input events directly through a C graphics library",
+      "Learned to write portable C across two different graphics backends behind the same interface"
+    ]
+  },
+  {
+    "slug": "push-swap-42-project",
+    "name": "push_swap",
+    "description": "A stack-sorting program in C that sorts integers with a constrained instruction set, choosing moves via a cost-based algorithm to minimize total operations.",
+    "technologies": ["C", "Algorithms", "Data Structures"],
+    "githubUrl": "https://github.com/faresQ7h/push_swap-42-project",
+    "screenshots": ["/assets/projects/pushswap.svg"],
+    "skillsDemonstrated": ["Algorithms", "Data Structures", "Optimization"],
+    "status": "Completed",
+    "featured": false,
+    "overview": "push_swap sorts an arbitrary list of integers into ascending order using only a small, constrained set of stack operations, push, swap, rotate, and reverse-rotate, across two stacks, aiming to do it in as few operations as possible rather than just correctly. Instead of a simple sort-then-translate approach, it uses a cost-based algorithm that picks the cheapest next move at every step.",
+    "architecture": "The program validates and parses its integer arguments before splitting the sorting logic across dedicated modules for the primitive stack operations, composite moves, and the core target-selection and cost-calculation loop, all driven from a single entry point. Formatted output uses a custom libftprintf implementation.",
+    "keyFeatures": [
+      "Sorts any valid list of integers using only the allowed stack operations (pa, pb, sa, sb, ra, rb, rra, rrb, rrr)",
+      "Cost-based move selection: computes the cheapest combination of rotations on both stacks before choosing which value to move next",
+      "Input validation rejecting non-numeric input, duplicates, and out-of-range values with a clear error",
+      "Small-stack fast path that sorts the last two or three remaining elements directly instead of running the full algorithm on them"
+    ],
+    "challenges": [
+      "Minimizing the total number of operations rather than just producing a correct order, which meant designing a cost model instead of picking any sorting algorithm",
+      "Deciding, for every element, the cheapest combination of same-direction rotations versus split rotations across two stacks at once"
+    ],
+    "engineeringDecisions": [
+      "Chose a target-node strategy, where each value is assigned the closest valid position in the sorted stack, over a generic comparison sort, since the operation-count constraint rewards moves that place a value correctly on the first try",
+      "Iterated through more than one sorting approach during development before arriving at the final cost-based algorithm"
+    ],
+    "technologyNotes": "C, implementing the algorithm and stack operations from scratch with no external sorting libraries, verified against the 42 curriculum's checker tool for correctness and move count.",
+    "lessonsLearned": [
+      "Practiced algorithmic thinking under a hard operation-count constraint, not just correctness",
+      "Learned to reason about combined cost across two coupled data structures instead of optimizing each in isolation",
+      "Improved comfort iterating on an algorithm's design once a first working version already exists"
+    ]
+  },
+  {
+    "slug": "expense-tracker-python",
+    "name": "Expense Tracker",
+    "description": "A command-line expense and wallet tracker in Python with category, date, and amount filtering and local JSON persistence.",
+    "technologies": ["Python", "JSON"],
+    "githubUrl": "https://github.com/faresQ7h/expense_tracker-programe-in-python",
+    "screenshots": ["/assets/projects/expense.svg"],
+    "skillsDemonstrated": ["Python", "Data Persistence", "CLI Application Logic"],
+    "status": "Completed",
+    "featured": false,
+    "overview": "A menu-driven command-line application for tracking personal expenses and income, and computing the resulting wallet balance from both histories. It supports filtering expense and income records by date, category, and amount, and persists all data to a local JSON file so history survives between runs.",
+    "architecture": "The application is organized around an object-oriented model of expenses, income, and the wallet, with expense and income histories tracked separately and the wallet balance derived from both rather than stored as an independent value. All state loads from and saves to a single local JSON file.",
+    "keyFeatures": [
+      "Add and remove individual expense and income entries",
+      "View full expense and income history",
+      "Filter expenses by amount, category, or date, and income by amount or date",
+      "Automatic wallet balance calculation from combined expense and income history",
+      "Input validation on entered amounts, categories, and dates",
+      "Persistent local storage via a JSON save file"
+    ],
+    "challenges": [
+      "Keeping the wallet balance correct and consistently derived from two separately tracked histories instead of letting it drift out of sync",
+      "Designing multi-criteria filtering by date, category, and amount over a plain list of records without a database query layer"
+    ],
+    "engineeringDecisions": [
+      "Kept expenses and income as two distinct histories rather than one combined ledger, since they're filtered and displayed differently, and derived the balance from both instead of storing it separately",
+      "Chose JSON file storage over a database for a project at this scale, while recognizing in hindsight that splitting the single-file script into separate modules and moving to SQLite would be the right next step for maintainability"
+    ],
+    "technologyNotes": "Python, using the standard library's json module for persistence and datetime for date handling and filtering, with no external dependencies.",
+    "lessonsLearned": [
+      "Practiced core object-oriented programming and organizing a larger Python program than a single script",
+      "Learned practical JSON read/write persistence and date/time handling",
+      "Recognized in retrospect that a single-file structure limits maintainability, which now informs how later projects are split into modules from the start"
+    ]
+  },
+  {
+    "slug": "mini-gpt",
+    "name": "miniGPT",
+    "description": "A local LLaMA3 chatbot that runs entirely offline through Ollama, with an automated setup script and in-session conversation memory.",
+    "technologies": ["Python", "Ollama", "LLaMA3"],
+    "githubUrl": "https://github.com/faresQ7h/miniGPT",
+    "screenshots": ["/assets/projects/minigpt.svg"],
+    "skillsDemonstrated": ["Automation", "Local AI Tooling", "REST API Integration"],
+    "status": "Completed",
+    "featured": false,
+    "overview": "A lightweight command-line chatbot that runs a local LLaMA3 model through Ollama, with no cloud API or external service involved. A companion setup script automates the local environment end to end, installing missing Python dependencies, installing and starting Ollama if it isn't already running, pulling the LLaMA3 model, and launching the chat loop, so the whole thing works from a single command.",
+    "architecture": "The project is split into two scripts with a clear separation of concerns: one script handles environment setup, checking for and installing Python dependencies and Ollama, starting the Ollama server, and pulling the llama3 model, before launching the chatbot; the other owns the conversation loop itself, sending each user message plus the running message history to Ollama's local /api/chat endpoint and appending both the user and assistant turns to an in-memory list so the model has conversation context on each request.",
+    "keyFeatures": [
+      "Fully local inference through Ollama's LLaMA3 model, no API keys, no cloud calls",
+      "One-command automated setup that installs Python dependencies and Ollama, pulls the model, and starts the chat loop",
+      "Conversation memory maintained for the duration of the session so follow-up questions have context"
+    ],
+    "challenges": [
+      "Automating a working local LLM environment from zero, detecting whether Ollama and the model are already installed, and installing them without user intervention when they aren't"
+    ],
+    "engineeringDecisions": [
+      "Kept conversation history in a simple in-memory list scoped to the session rather than persisting it to disk, since the project's goal was a minimal, fully local chat loop rather than a chat-history product",
+      "Called Ollama's REST API directly with the requests library instead of adding an SDK dependency, keeping the script's only external dependency small"
+    ],
+    "technologyNotes": "Python for the chatbot and setup automation, calling Ollama's local REST API to run the LLaMA3 model entirely on-device.",
+    "lessonsLearned": [
+      "Practiced integrating with a local LLM runtime over HTTP instead of a hosted API",
+      "Learned to script cross-environment setup automation, dependency checks and conditional installs, so a project works out of the box on a clean machine"
+    ]
+  },
+  {
+    "slug": "ai-job-search-assistant",
+    "name": "AI Job Search Assistant",
+    "description": "An in-development automation workflow combining n8n and LLMs to streamline internship search, application tracking, and outreach.",
+    "technologies": ["Python", "n8n", "LLMs", "REST APIs", "JSON"],
+    "githubUrl": "",
+    "screenshots": ["/assets/projects/automation.svg"],
+    "skillsDemonstrated": ["Automation", "API Integration", "AI Workflow Design"],
+    "status": "In Development",
+    "featured": true,
+    "overview": "A personal automation project currently in development, aiming to reduce the manual overhead of an internship search by combining workflow automation with LLM-assisted content generation: surfacing relevant postings, drafting tailored CVs and cover letters, and tracking applications with notifications as they progress. The architecture and workflow are still being designed, so this page will expand once implementation is underway.",
+    "architecture": "",
+    "keyFeatures": [],
+    "challenges": [],
+    "engineeringDecisions": [],
+    "technologyNotes": "Planned stack: n8n to orchestrate the workflow (searching, tracking, notifying), with an LLM handling the language-generation steps such as CV and cover letter drafting, connected through REST APIs and JSON.",
+    "lessonsLearned": []
+  }
+]

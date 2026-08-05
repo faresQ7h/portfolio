@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-label="Workflow automation preview">
+  <rect width="720" height="420" fill="#0b0d12"/>
+  <g fill="#11141b" stroke="#4da3ff" stroke-width="3">
+    <rect x="74" y="168" width="140" height="84" rx="8"/>
+    <rect x="290" y="168" width="140" height="84" rx="8"/>
+    <rect x="506" y="168" width="140" height="84" rx="8"/>
+  </g>
+  <path d="M214 210 H290 M430 210 H506" stroke="#747f91" stroke-width="5"/>
+  <text x="144" y="218" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#f5f7fb">Search</text>
+  <text x="360" y="218" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#f5f7fb">Generate</text>
+  <text x="576" y="218" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#f5f7fb">Track</text>
+</svg>

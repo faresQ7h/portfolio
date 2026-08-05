@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-label="Project preview placeholder">
+  <rect width="720" height="420" fill="#0b0d12"/>
+  <rect x="72" y="72" width="576" height="276" rx="8" fill="#11141b" stroke="#2a3342"/>
+  <text x="360" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#86c5ff">Project preview</text>
+</svg>
