@@ -602,6 +602,12 @@ h3 {
   gap: 14px;
 }
 
+@media (min-width: 981px) {
+  .skills-grid > .skill-card:last-child:nth-child(3n+1) {
+    grid-column: 1 / -1;
+  }
+}
+
 .skill-card,
 .timeline-item,
 .learning-card,

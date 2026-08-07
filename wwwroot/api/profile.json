@@ -104,24 +104,34 @@
   ],
   "skills": [
     {
-      "name": "Programming Languages",
+      "name": "Languages",
       "icon": "{ }",
-      "items": ["C", "C++", "C#", "Python", "SQL", "JavaScript", "HTML", "CSS", "Bash"]
+      "items": ["C", "C++", "C#", "Python", "JavaScript", "SQL", "Bash"]
     },
     {
-      "name": "Frameworks",
+      "name": "Web Technologies",
+      "icon": "</>",
+      "items": ["HTML5", "CSS3"]
+    },
+    {
+      "name": "Frameworks & Platforms",
       "icon": ".NET",
-      "items": [".NET", "ASP.NET", "WinForms", "REST APIs", "JSON", "XML"]
+      "items": [".NET", "ASP.NET", "WinForms"]
     },
     {
-      "name": "Backend",
+      "name": "Backend & APIs",
       "icon": "API",
-      "items": ["Backend Development", "Client-Server Architecture", "RESTful APIs", "HTTP/HTTPS", "API Integration"]
+      "items": ["Backend Development", "Client-Server Architecture", "REST APIs", "HTTP/HTTPS", "API Integration"]
     },
     {
       "name": "Databases",
       "icon": "DB",
       "items": ["PostgreSQL", "Relational Database Design", "ER Modeling", "Normalization (3NF)", "Constraints & Data Integrity", "SQL Joins", "Aggregations", "Subqueries"]
+    },
+    {
+      "name": "Data Formats",
+      "icon": "FMT",
+      "items": ["JSON", "XML", "CSV", "YAML", "Markdown"]
     },
     {
       "name": "Linux",
@@ -131,15 +141,15 @@
     {
       "name": "Networking",
       "icon": "IP",
-      "items": ["TCP/IP Fundamentals", "Computer Networking", "CCNA preparation"]
+      "items": ["TCP/IP Fundamentals", "Computer Networking", "CCNA Preparation"]
     },
     {
-      "name": "Cloud",
+      "name": "Cloud & Deployment",
       "icon": "AZ",
       "items": ["Microsoft Azure", "Azure App Services", "Cloud Fundamentals", "Deployment & Hosting"]
     },
     {
-      "name": "Tools",
+      "name": "Developer Tools",
       "icon": "Git",
       "items": ["Git", "GitHub", "Pull Requests", "Code Reviews", "gdb", "Valgrind", "Virtual Machines", "Agile/Scrum", "Visual Studio", "Visual Studio Code"]
     }
