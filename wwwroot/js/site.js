@@ -343,7 +343,7 @@ const setupActiveNavigation = () => {
     .map((link) => document.querySelector(link.getAttribute("href")))
     .filter(Boolean);
 
-  if (!sections.length || !("IntersectionObserver" in window)) return;
+  if (!sections.length) return;
 
   const setActiveLink = (id) => {
     links.forEach((link) => {
@@ -357,20 +357,55 @@ const setupActiveNavigation = () => {
     });
   };
 
-  const observer = new IntersectionObserver((entries) => {
-    const visible = entries
-      .filter((entry) => entry.isIntersecting)
-      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+  const getHeaderHeight = () => select("[data-header]")?.offsetHeight ?? 0;
 
-    if (visible?.target.id) {
-      setActiveLink(visible.target.id);
+  const getActiveSection = () => {
+    const viewportTop = getHeaderHeight();
+    const viewportBottom = window.innerHeight;
+    let activeSection = null;
+    let largestVisibleArea = 0;
+
+    for (const section of sections) {
+      const rect = section.getBoundingClientRect();
+      const visibleTop = Math.max(rect.top, viewportTop);
+      const visibleBottom = Math.min(rect.bottom, viewportBottom);
+      const visibleArea = Math.max(0, visibleBottom - visibleTop);
+
+      if (visibleArea > largestVisibleArea) {
+        activeSection = section;
+        largestVisibleArea = visibleArea;
+      }
     }
-  }, {
-    rootMargin: "-22% 0px -58% 0px",
-    threshold: [0.12, 0.3, 0.6]
-  });
 
-  sections.forEach((section) => observer.observe(section));
+    return activeSection;
+  };
+
+  let updateQueued = false;
+  const updateActiveSection = () => {
+    updateQueued = false;
+    const activeSection = getActiveSection();
+
+    setActiveLink(activeSection?.id);
+  };
+
+  const queueActiveSectionUpdate = () => {
+    if (updateQueued) return;
+    updateQueued = true;
+    window.requestAnimationFrame(updateActiveSection);
+  };
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(queueActiveSectionUpdate, {
+      rootMargin: `-${getHeaderHeight()}px 0px -45% 0px`,
+      threshold: [0, 0.3, 0.6]
+    });
+
+    sections.forEach((section) => observer.observe(section));
+  }
+
+  window.addEventListener("scroll", queueActiveSectionUpdate, { passive: true });
+  window.addEventListener("resize", queueActiveSectionUpdate);
+  queueActiveSectionUpdate();
 };
 
 const boot = async () => {
