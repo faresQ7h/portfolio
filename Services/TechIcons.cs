@@ -13,27 +13,20 @@ public static class TechIcons
         ["Python"] = "icon-python",
         ["SQL"] = "icon-sql",
         ["JavaScript"] = "icon-javascript",
-        ["HTML5"] = "icon-html5",
-        ["CSS3"] = "icon-css3",
         ["Bash"] = "icon-bash",
         [".NET"] = "icon-dotnet",
-        ["ASP.NET"] = "icon-dotnet",
+        ["ASP.NET Core"] = "icon-dotnet",
         ["PostgreSQL"] = "icon-postgresql",
-        ["Linux Mint"] = "icon-linuxmint",
-        ["Linux/Unix"] = "icon-linux",
-        ["CCNA Preparation"] = "icon-cisco",
+        ["Linux"] = "icon-linux",
         ["Git"] = "icon-git",
-        ["GitHub"] = "icon-github",
-        ["Visual Studio"] = "icon-visualstudio",
-        ["Visual Studio Code"] = "icon-vscode"
+        ["GitHub Actions"] = "icon-github"
     };
 
     // Brand marks kept as standalone asset files (full official artwork, e.g. gradients) instead of
     // the sprite, so they render pixel-for-pixel like the source logo.
     private static readonly Dictionary<string, string> AssetFiles = new(StringComparer.Ordinal)
     {
-        ["Microsoft Azure"] = "/assets/icons/azureLogo.svg",
-        ["Azure App Services"] = "/assets/icons/azureLogo.svg"
+        ["Azure App Service"] = "/assets/icons/azureLogo.svg"
     };
 
     private static readonly Dictionary<string, string> LearningSymbols = new(StringComparer.Ordinal)

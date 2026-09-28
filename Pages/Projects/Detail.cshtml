@@ -32,30 +32,39 @@
           </div>
         </div>
         <div class="project-gallery">
-          <div class="project-gallery-hero" data-gallery data-gallery-label="@project.Name screenshot gallery, use the arrow buttons or left/right arrow keys to browse">
-            <img class="project-shot large" data-gallery-image src="@mainImage.Url" alt="@project.Name project screenshot"
-                 width="@(mainImage.Size?.Width ?? 720)" height="@(mainImage.Size?.Height ?? 420)" loading="eager">
-            @if (hasGallery)
-            {
-              <button class="gallery-arrow gallery-arrow-prev" type="button" data-gallery-prev aria-label="Previous screenshot" hidden>&#10094;</button>
-              <button class="gallery-arrow gallery-arrow-next" type="button" data-gallery-next aria-label="Next screenshot" hidden>&#10095;</button>
-            }
-          </div>
-          @if (hasGallery)
+          @if (!string.IsNullOrEmpty(project.Diagram))
           {
-            <div class="project-thumb-row" aria-label="@project.Name screenshots">
-              @for (var index = 0; index < Model.Screenshots.Count; index++)
+            <figure class="project-diagram">
+              <partial name="_ProjectDiagram" model="new DiagramModel(project.Diagram, Decorative: false)" />
+            </figure>
+          }
+          else
+          {
+            <div class="project-gallery-hero" data-gallery data-gallery-label="@project.Name screenshot gallery, use the arrow buttons or left/right arrow keys to browse">
+              <img class="project-shot large" data-gallery-image src="@mainImage.Url" alt="@project.Name project screenshot"
+                   width="@(mainImage.Size?.Width ?? 720)" height="@(mainImage.Size?.Height ?? 420)" loading="eager">
+              @if (hasGallery)
               {
-                var shot = Model.Screenshots[index];
-                var isFirst = index == 0;
-                @* Real links to the full image, so the thumbnails still work without JavaScript. *@
-                <a class="@(isFirst ? "project-thumb is-active" : "project-thumb")" href="@shot.Url" data-gallery-thumb
-                   data-width="@shot.Size?.Width" data-height="@shot.Size?.Height"
-                   aria-label="Show screenshot @(index + 1) of @Model.Screenshots.Count" aria-current="@(isFirst ? "true" : null)">
-                  <img src="@shot.Url" alt="" width="160" height="94" loading="lazy" decoding="async">
-                </a>
+                <button class="gallery-arrow gallery-arrow-prev" type="button" data-gallery-prev aria-label="Previous screenshot" hidden>&#10094;</button>
+                <button class="gallery-arrow gallery-arrow-next" type="button" data-gallery-next aria-label="Next screenshot" hidden>&#10095;</button>
               }
             </div>
+            @if (hasGallery)
+            {
+              <div class="project-thumb-row" aria-label="@project.Name screenshots">
+                @for (var index = 0; index < Model.Screenshots.Count; index++)
+                {
+                  var shot = Model.Screenshots[index];
+                  var isFirst = index == 0;
+                  @* Real links to the full image, so the thumbnails still work without JavaScript. *@
+                  <a class="@(isFirst ? "project-thumb is-active" : "project-thumb")" href="@shot.Url" data-gallery-thumb
+                     data-width="@shot.Size?.Width" data-height="@shot.Size?.Height"
+                     aria-label="Show screenshot @(index + 1) of @Model.Screenshots.Count" aria-current="@(isFirst ? "true" : null)">
+                    <img src="@shot.Url" alt="" width="160" height="94" loading="lazy" decoding="async">
+                  </a>
+                }
+              </div>
+            }
           }
         </div>
       </div>

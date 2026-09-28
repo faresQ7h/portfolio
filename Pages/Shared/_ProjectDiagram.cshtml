@@ -1,0 +1,60 @@
+@model DiagramModel
+@*
+  Inline SVG diagrams for projects whose best "screenshot" is how they work. Colours come from the
+  site's CSS custom properties, so the diagram follows the page theme. On project cards the diagram
+  sits inside a labelled link, so it is decorative there; on the detail page it is a titled image.
+*@
+@if (Model.Name == "deployment-pipeline")
+{
+    // Two rows of three steps, read left-to-right then right-to-left (a "U" through the pipeline).
+    var steps = new (string Title, string Detail, bool Accent)[]
+    {
+        ("GitHub repo", "push to main", false),
+        ("Build job", "build · test · publish", false),
+        ("Deploy job", "download artifact", false),
+        ("OIDC login", "short-lived token", true),
+        ("App Service", "Azure · Production", false),
+        ("faresm.dev", "HTTPS · HSTS", true)
+    };
+    int[] columns = [15, 255, 495, 495, 255, 15];
+    const int boxWidth = 210, boxHeight = 104, topRow = 52, bottomRow = 268;
+
+    <svg class="diagram" viewBox="0 0 720 420" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"
+         role="@(Model.Decorative ? null : "img")" aria-hidden="@(Model.Decorative ? "true" : null)"
+         aria-labelledby="@(Model.Decorative ? null : "pipeline-title pipeline-desc")" focusable="false">
+      @if (!Model.Decorative)
+      {
+        <title id="pipeline-title">Deployment pipeline for faresm.dev</title>
+        <desc id="pipeline-desc">A push to the main branch of the GitHub repository starts a GitHub Actions build job that builds the app, runs the tests and publishes an artifact. A deploy job downloads the artifact, signs in to Azure with an OIDC short-lived token instead of a stored secret, and deploys to Azure App Service, which serves faresm.dev over HTTPS.</desc>
+      }
+      <defs>
+        <marker id="pipeline-arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path class="diagram-arrowhead" d="M0 0 L10 5 L0 10 z"/>
+        </marker>
+      </defs>
+      <text class="diagram-caption" x="15" y="32">push to main → production</text>
+
+      @for (var i = 0; i < steps.Length; i++)
+      {
+          var (title, detail, accent) = steps[i];
+          var x = columns[i];
+          var y = i < 3 ? topRow : bottomRow;
+          @* Wrapped in <g> so Razor doesn't read the SVG <text> elements as its own <text> tag. *@
+          <g>
+            <rect class="@(accent ? "diagram-box diagram-box-accent" : "diagram-box")" x="@x" y="@y" width="@boxWidth" height="@boxHeight" rx="10"/>
+            <text class="diagram-title" x="@(x + boxWidth / 2)" y="@(y + 46)" text-anchor="middle">@title</text>
+            <text class="diagram-detail" x="@(x + boxWidth / 2)" y="@(y + 76)" text-anchor="middle">@detail</text>
+          </g>
+      }
+
+      @* top row: left to right *@
+      <path class="diagram-arrow" d="M227 @(topRow + boxHeight / 2) H253" marker-end="url(#pipeline-arrowhead)"/>
+      <path class="diagram-arrow" d="M467 @(topRow + boxHeight / 2) H493" marker-end="url(#pipeline-arrowhead)"/>
+      @* down the right-hand side, then bottom row right to left *@
+      <path class="diagram-arrow" d="M600 @(topRow + boxHeight + 2) V @(bottomRow - 2)" marker-end="url(#pipeline-arrowhead)"/>
+      <path class="diagram-arrow" d="M493 @(bottomRow + boxHeight / 2) H467" marker-end="url(#pipeline-arrowhead)"/>
+      <path class="diagram-arrow" d="M253 @(bottomRow + boxHeight / 2) H227" marker-end="url(#pipeline-arrowhead)"/>
+
+      <text class="diagram-caption" x="360" y="404" text-anchor="middle">no publish profile or client secret stored in GitHub</text>
+    </svg>
+}

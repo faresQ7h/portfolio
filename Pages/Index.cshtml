@@ -30,14 +30,17 @@
           <p class="headline">@personal.Headline</p>
           <p class="hero-summary">@personal.Summary</p>
           <div class="hero-actions">
-            <a class="icon-button" href="@personal.GitHubUrl" target="_blank" rel="noopener" aria-label="GitHub profile">
-              <img src="/assets/icons/githupLogo.svg" alt="" width="20" height="20" decoding="async">
-            </a>
-            <a class="icon-button" href="@personal.LinkedInUrl" target="_blank" rel="noopener" aria-label="LinkedIn profile">
-              <img src="/assets/icons/linkedinLogo.svg" alt="" width="20" height="20" decoding="async">
-            </a>
+            @if (Model.CvUrl is not null)
+            {
+              <a class="button button-primary" href="@Model.CvUrl" download>Download CV</a>
+            }
+            @await Html.PartialAsync("_GitHubButton", new GitHubButtonModel(personal.GitHubUrl, "button button-secondary", "GitHub"))
+            <a class="button button-secondary" href="@($"mailto:{personal.Email}")">Email</a>
           </div>
-          <p class="resume-note">Resume available upon request &mdash; <a class="text-link" href="#contact">Contact me</a></p>
+          @if (Model.CvUrl is null)
+          {
+            <p class="resume-note">Resume available upon request &mdash; <a class="text-link" href="#contact">Contact me</a></p>
+          }
         </div>
         <aside class="identity-panel" aria-label="Profile snapshot">
           <img class="avatar" src="@personal.AvatarUrl" alt="Portrait of @personal.Name" width="240" height="240" fetchpriority="high" decoding="async">
@@ -104,19 +107,31 @@
           <h2 id="skills-title">Technical Skills</h2>
         </div>
         <div class="skills-grid">
-          @foreach (var category in Model.Profile.Skills)
+          @foreach (var group in Model.Skills)
           {
             <article class="skill-card">
               <div class="skill-card-header">
-                <span class="skill-icon">@category.Icon</span>
-                <h3>@category.Name</h3>
+                <span class="skill-icon" aria-hidden="true">@group.Icon</span>
+                <h3>@group.Name</h3>
               </div>
-              <div class="tag-row">
-                @foreach (var item in category.Items)
+              <ul class="skill-list">
+                @foreach (var skill in group.Items)
                 {
-                  <partial name="_SkillTag" model="item" />
+                  <li>
+                    <partial name="_SkillTag" model="skill.Name" />
+                    @if (skill.UsedIn.Count > 0)
+                    {
+                      <span class="skill-used">used in
+                        @for (var i = 0; i < skill.UsedIn.Count; i++)
+                        {
+                          var used = skill.UsedIn[i];
+                          <a href="/projects/@used.Slug">@used.Name</a>@(i < skill.UsedIn.Count - 1 ? ", " : "")
+                        }
+                      </span>
+                    }
+                  </li>
                 }
-              </div>
+              </ul>
             </article>
           }
         </div>
@@ -142,30 +157,16 @@
     </section>
 
     <section class="section section-muted" id="education" aria-labelledby="education-title">
-      <div class="container two-column">
-        <div>
-          <div class="section-heading compact">
-            <p class="eyebrow">Education</p>
-            <h2 id="education-title">Academic path</h2>
-          </div>
-          <div class="timeline">
-            @foreach (var entry in Model.Education)
-            {
-              <partial name="_TimelineItem" model="entry" />
-            }
-          </div>
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Education</p>
+          <h2 id="education-title">Academic path</h2>
         </div>
-        <div>
-          <div class="section-heading compact">
-            <p class="eyebrow">Experience</p>
-            <h2>Applied practice</h2>
-          </div>
-          <div class="timeline">
-            @foreach (var entry in Model.Experience)
-            {
-              <partial name="_TimelineItem" model="entry" />
-            }
-          </div>
+        <div class="education-grid">
+          @foreach (var entry in Model.Education)
+          {
+            <partial name="_TimelineItem" model="entry" />
+          }
         </div>
       </div>
     </section>
@@ -196,6 +197,10 @@
             </article>
           }
         </div>
+        @if (Model.Profile.CurrentlyBuilding is { } building)
+        {
+          <p class="building-note"><span class="building-label">Currently building</span> <strong>@building.Name</strong>. @building.Summary</p>
+        }
       </div>
     </section>
 

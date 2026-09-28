@@ -5,6 +5,7 @@
     "description": "A POSIX-compliant Unix shell written in C from scratch, with a full lexer-parser-executor pipeline, pipes, redirections, and built-in commands.",
     "technologies": ["C", "POSIX", "Linux", "Unix", "GNU Readline", "Git", "gdb", "Valgrind"],
     "githubUrl": "https://github.com/faresQ7h/minishell-42Prague",
+    "diagram": "",
     "screenshots": ["/assets/minishell/"],
     "fallbackImage": "/assets/projects/minishell.svg",
     "skillsDemonstrated": ["Systems Programming", "Linux", "Debugging", "Memory Management", "Git Collaboration"],
@@ -39,11 +40,53 @@
     ]
   },
   {
+    "slug": "faresm-dev",
+    "name": "faresm.dev",
+    "description": "This site: ASP.NET Core 10 with server-rendered pages and a REST API over the same JSON-backed data, deployed to Azure App Service by GitHub Actions using OIDC, with no publish profile or client secret stored.",
+    "technologies": ["C#", "ASP.NET Core", "Azure App Service", "GitHub Actions", "OIDC", "Razor Pages", "REST APIs", "JSON", "xUnit", "JavaScript", "HTML5", "CSS3"],
+    "githubUrl": "https://github.com/faresQ7h/portfolio",
+    "diagram": "deployment-pipeline",
+    "screenshots": [],
+    "fallbackImage": "",
+    "skillsDemonstrated": ["Backend", "CI/CD", "Cloud Deployment", "Automated Testing"],
+    "status": "Live",
+    "featured": true,
+    "overview": "The site you are reading. It started as a static page that fetched JSON in the browser and was rebuilt so the server does the work: every page is rendered with Razor Pages from the same data service that backs a small REST API, so crawlers, link previews and visitors without JavaScript get complete HTML. It runs on Azure App Service at faresm.dev over HTTPS, and every push to main goes through an automated build, test and deploy pipeline.",
+    "architecture": "Content lives in two JSON files (profile and projects) outside the web root. A singleton data service reads them, caches the parsed result in memory and evicts it when a file changes. Razor Pages render the home page and one detail page per project from that service, while API controllers expose the same data at /api/profile and /api/projects. A media service discovers screenshot folders on disk and reads image dimensions from file headers, so every image ships with explicit width and height. Deployment is a two-job GitHub Actions workflow: the build job builds the app, runs the xUnit test suite and publishes an artifact; the deploy job signs in to Azure with OpenID Connect and deploys that artifact to App Service.",
+    "keyFeatures": [
+      "Server-rendered pages: complete HTML for crawlers, link previews and visitors without JavaScript",
+      "REST endpoints (/api/profile, /api/projects, /api/projects/{slug}) backed by the same data service as the pages",
+      "Real 404 responses for unknown routes and project slugs",
+      "Screenshot galleries discovered from the filesystem, with image dimensions read from file headers",
+      "xUnit integration tests (WebApplicationFactory) that run in CI before every deploy",
+      "Deployment authenticated with OIDC federated credentials instead of a stored publish profile or client secret",
+      "Custom domain (faresm.dev) served over HTTPS with HSTS"
+    ],
+    "challenges": [
+      "Moving from client-side to server-side rendering without changing the JSON API or the data format behind it",
+      "Making sure the content files are only reachable through the API and the pages, not downloadable as raw static files",
+      "Deploying to Azure from CI without keeping long-lived credentials in the repository"
+    ],
+    "engineeringDecisions": [
+      "Rendered pages on the server with Razor Pages instead of adding a frontend framework, keeping JavaScript for progressive enhancement only",
+      "Kept content in JSON files rather than a database, since it is small, changes rarely and is edited by hand; an in-memory cache with file-change invalidation keeps reads cheap",
+      "Used OIDC federated credentials for the Azure login, so the workflow exchanges a short-lived GitHub token for Azure access instead of storing a deploy password",
+      "Read image dimensions from file headers instead of adding an imaging library dependency"
+    ],
+    "technologyNotes": "C# on ASP.NET Core 10 (Razor Pages and API controllers), vanilla JavaScript, HTML and CSS on the front end, xUnit with WebApplicationFactory for tests, GitHub Actions for CI/CD, and Azure App Service for hosting.",
+    "lessonsLearned": [
+      "When the content already lives on the server, server-side rendering is the simplest fix for SEO and link previews",
+      "Federated identity removes the need to store and rotate a deploy secret in CI/CD",
+      "Integration tests against the real HTTP pipeline catch routing and status-code regressions that unit tests miss"
+    ]
+  },
+  {
     "slug": "hotel-booking-database",
     "name": "Hotel Booking Database",
     "description": "A normalized PostgreSQL database for hotel booking management, with trigger-driven price recalculation and automatic booking-status transitions.",
-    "technologies": ["PostgreSQL", "SQL", "PL/pgSQL", "ER Modeling"],
+    "technologies": ["PostgreSQL", "SQL", "PL/pgSQL", "ER Modeling", "Normalization (3NF)", "Constraints & Triggers"],
     "githubUrl": "https://github.com/faresQ7h/hotel-booking-system-database",
+    "diagram": "",
     "screenshots": ["/assets/HotelBokking_DB/"],
     "fallbackImage": "/assets/projects/database.svg",
     "skillsDemonstrated": ["Database Design", "SQL", "Data Integrity"],
@@ -77,52 +120,17 @@
     ]
   },
   {
-    "slug": "business-inventory-management",
-    "name": "Business Inventory Management",
-    "description": "A C# WinForms desktop application for managing products, customers, and orders for a small business, with local persistence and a live business-stats dashboard.",
-    "technologies": ["C#", ".NET", "WinForms", "JSON"],
-    "githubUrl": "https://github.com/faresQ7h/business-inventory-management-app-winforms-csharp",
-    "screenshots": ["/assets/Inventory_managment_winformApp/"],
-    "fallbackImage": "/assets/projects/inventory.svg",
-    "skillsDemonstrated": ["Desktop Development", "OOP", "Software Design"],
-    "status": "Completed",
-    "featured": true,
-    "overview": "A Windows desktop application built with C# and WinForms for managing the day-to-day inventory operations of a small business, tracking products, customers, and orders behind a login-protected interface. The home dashboard surfaces live business stats, delivered versus undelivered orders and monthly profit, plus upcoming deliveries, and a dedicated reporting view lets the user review stored records.",
-    "architecture": "The application follows an event-driven WinForms structure with a login screen gating access to the main dashboard, and a sidebar-navigated interface (Home, Products, Customers, Orders, Reports) built from separate, modular forms per business area. Rather than a database engine, application state is persisted locally as JSON under the user's Windows AppData folder, created automatically on first run, keeping the application self-contained with no external server dependency.",
-    "keyFeatures": [
-      "Login-protected access with a change-password flow",
-      "Product, customer, and order management: add, edit, delete, view",
-      "Home dashboard with live business statistics: delivered/undelivered orders and monthly profit",
-      "Upcoming-deliveries view for the current month",
-      "Reporting screen for reviewing stored business data",
-      "Fully local, offline data persistence with no server or internet connection required"
-    ],
-    "challenges": [
-      "Keeping inventory quantities, order status, and computed stats like monthly profit consistent as products, customers, and orders are added, edited, or deleted independently",
-      "Structuring the local data layer so it survives application restarts without a database engine, while staying predictable to read and write from multiple forms"
-    ],
-    "engineeringDecisions": [
-      "Separated the UI event handlers in each WinForms form from the underlying business logic and data-access code, so operations like computing monthly profit aren't duplicated across screens",
-      "Stored data locally under the OS-managed AppData directory instead of a bundled database file, matching how small single-user Windows desktop tools are typically distributed"
-    ],
-    "technologyNotes": "C# and Windows Forms (.NET) for the desktop UI and event-driven application logic, with local JSON files used for persistence instead of a database engine, keeping the application self-contained and easy to distribute as a single executable.",
-    "lessonsLearned": [
-      "Practiced separating UI event handling from reusable business logic in a WinForms application",
-      "Gained experience with event-driven desktop application design end to end, from login to reporting",
-      "Learned how early persistence decisions, flat local files versus a database, shape how much rework is needed as an application grows"
-    ]
-  },
-  {
     "slug": "philosophers-42prague",
     "name": "Philosophers",
     "description": "A multithreaded C simulation of the Dining Philosophers problem, using POSIX threads and mutexes to prevent deadlocks while enforcing strict timing constraints.",
     "technologies": ["C", "POSIX Threads", "Linux"],
     "githubUrl": "https://github.com/faresQ7h/philosophers-42Prague",
+    "diagram": "",
     "screenshots": ["/assets/philosophers/"],
     "fallbackImage": "/assets/projects/philosophers.svg",
     "skillsDemonstrated": ["Concurrency", "Systems Programming", "Debugging"],
     "status": "Completed",
-    "featured": false,
+    "featured": true,
     "overview": "An implementation of the classic Dining Philosophers concurrency problem in C using POSIX threads, where each philosopher runs as its own thread alternating between thinking, eating, and sleeping while sharing a fixed number of forks with its neighbors. The simulation enforces strict timing rules, a philosopher who doesn't eat before a configurable time-to-die limit is detected as dead, so correctness depends as much on precise timing as on avoiding deadlocks and race conditions.",
     "architecture": "Each philosopher runs on its own pthread executing a shared routine that cycles through thinking, taking two fork mutexes, eating, releasing them, and sleeping. A separate monitor thread runs concurrently, checking every philosopher's last-meal timestamp against the time-to-die limit to detect starvation without interrupting the eating threads. A dedicated timing helper breaks sleep calls into short intervals so the monitor can still detect a death promptly instead of oversleeping past the deadline.",
     "keyFeatures": [
@@ -149,11 +157,49 @@
     ]
   },
   {
+    "slug": "business-inventory-management",
+    "name": "Business Inventory Management",
+    "description": "A C# WinForms desktop application for managing products, customers, and orders for a small business, with local persistence and a live business-stats dashboard.",
+    "technologies": ["C#", ".NET", "WinForms", "JSON"],
+    "githubUrl": "https://github.com/faresQ7h/business-inventory-management-app-winforms-csharp",
+    "diagram": "",
+    "screenshots": ["/assets/Inventory_managment_winformApp/"],
+    "fallbackImage": "/assets/projects/inventory.svg",
+    "skillsDemonstrated": ["Desktop Development", "OOP", "Software Design"],
+    "status": "Completed",
+    "featured": false,
+    "overview": "A Windows desktop application built with C# and WinForms for managing the day-to-day inventory operations of a small business, tracking products, customers, and orders behind a login-protected interface. The home dashboard surfaces live business stats, delivered versus undelivered orders and monthly profit, plus upcoming deliveries, and a dedicated reporting view lets the user review stored records.",
+    "architecture": "The application follows an event-driven WinForms structure with a login screen gating access to the main dashboard, and a sidebar-navigated interface (Home, Products, Customers, Orders, Reports) built from separate, modular forms per business area. Rather than a database engine, application state is persisted locally as JSON under the user's Windows AppData folder, created automatically on first run, keeping the application self-contained with no external server dependency.",
+    "keyFeatures": [
+      "Login-protected access with a change-password flow",
+      "Product, customer, and order management: add, edit, delete, view",
+      "Home dashboard with live business statistics: delivered/undelivered orders and monthly profit",
+      "Upcoming-deliveries view for the current month",
+      "Reporting screen for reviewing stored business data",
+      "Fully local, offline data persistence with no server or internet connection required"
+    ],
+    "challenges": [
+      "Keeping inventory quantities, order status, and computed stats like monthly profit consistent as products, customers, and orders are added, edited, or deleted independently",
+      "Structuring the local data layer so it survives application restarts without a database engine, while staying predictable to read and write from multiple forms"
+    ],
+    "engineeringDecisions": [
+      "Separated the UI event handlers in each WinForms form from the underlying business logic and data-access code, so operations like computing monthly profit aren't duplicated across screens",
+      "Stored data locally under the OS-managed AppData directory instead of a bundled database file, matching how small single-user Windows desktop tools are typically distributed"
+    ],
+    "technologyNotes": "C# and Windows Forms (.NET) for the desktop UI and event-driven application logic, with local JSON files used for persistence instead of a database engine, keeping the application self-contained and easy to distribute as a single executable.",
+    "lessonsLearned": [
+      "Practiced separating UI event handling from reusable business logic in a WinForms application",
+      "Gained experience with event-driven desktop application design end to end, from login to reporting",
+      "Learned how early persistence decisions, flat local files versus a database, shape how much rework is needed as an application grows"
+    ]
+  },
+  {
     "slug": "fract-ol-42-project",
     "name": "fract-ol",
     "description": "An interactive C fractal renderer for the Mandelbrot and Julia sets, with real-time zoom and colored iteration rendering built on MiniLibX.",
     "technologies": ["C", "MiniLibX", "X11", "Linux"],
     "githubUrl": "https://github.com/faresQ7h/fract-ol-42-project",
+    "diagram": "",
     "screenshots": ["/assets/fract-ol/"],
     "fallbackImage": "/assets/projects/fractol.svg",
     "skillsDemonstrated": ["Graphics Programming", "Mathematical Logic", "Input Handling"],
@@ -189,6 +235,7 @@
     "description": "A stack-sorting program in C that sorts integers with a constrained instruction set, choosing moves via a cost-based algorithm to minimize total operations.",
     "technologies": ["C", "Algorithms", "Data Structures"],
     "githubUrl": "https://github.com/faresQ7h/push_swap-42-project",
+    "diagram": "",
     "screenshots": ["/assets/projects/pushswap.svg"],
     "skillsDemonstrated": ["Algorithms", "Data Structures", "Optimization"],
     "status": "Completed",
@@ -222,6 +269,7 @@
     "description": "A command-line expense and wallet tracker in Python with category, date, and amount filtering and local JSON persistence.",
     "technologies": ["Python", "JSON"],
     "githubUrl": "https://github.com/faresQ7h/expense_tracker-programe-in-python",
+    "diagram": "",
     "screenshots": ["/assets/projects/expense.svg"],
     "skillsDemonstrated": ["Python", "Data Persistence", "CLI Application Logic"],
     "status": "Completed",
@@ -255,8 +303,9 @@
     "slug": "mini-gpt",
     "name": "miniGPT",
     "description": "A local LLaMA3 chatbot that runs entirely offline through Ollama, with an automated setup script and in-session conversation memory.",
-    "technologies": ["Python", "Ollama", "LLaMA3"],
+    "technologies": ["Python", "Ollama", "LLaMA3", "REST APIs"],
     "githubUrl": "https://github.com/faresQ7h/miniGPT",
+    "diagram": "",
     "screenshots": ["/assets/projects/minigpt.svg"],
     "skillsDemonstrated": ["Automation", "Local AI Tooling", "REST API Integration"],
     "status": "Completed",
@@ -280,23 +329,5 @@
       "Practiced integrating with a local LLM runtime over HTTP instead of a hosted API",
       "Learned to script cross-environment setup automation, dependency checks and conditional installs, so a project works out of the box on a clean machine"
     ]
-  },
-  {
-    "slug": "ai-job-search-assistant",
-    "name": "AI Job Search Assistant",
-    "description": "An in-development automation workflow combining n8n and LLMs to streamline internship search, application tracking, and outreach.",
-    "technologies": ["Python", "n8n", "LLMs", "REST APIs", "JSON"],
-    "githubUrl": "",
-    "screenshots": ["/assets/projects/automation.svg"],
-    "skillsDemonstrated": ["Automation", "API Integration", "AI Workflow Design"],
-    "status": "In Development",
-    "featured": true,
-    "overview": "A personal automation project currently in development, aiming to reduce the manual overhead of an internship search by combining workflow automation with LLM-assisted content generation: surfacing relevant postings, drafting tailored CVs and cover letters, and tracking applications with notifications as they progress. The architecture and workflow are still being designed, so this page will expand once implementation is underway.",
-    "architecture": "",
-    "keyFeatures": [],
-    "challenges": [],
-    "engineeringDecisions": [],
-    "technologyNotes": "Planned stack: n8n to orchestrate the workflow (searching, tracking, notifying), with an LLM handling the language-generation steps such as CV and cover letter drafting, connected through REST APIs and JSON.",
-    "lessonsLearned": []
   }
 ]

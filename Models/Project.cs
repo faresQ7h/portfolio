@@ -10,6 +10,8 @@ public sealed class Project
     public IReadOnlyList<string> Technologies { get; init; } = [];
     [JsonPropertyName("githubUrl")]
     public string GitHubUrl { get; init; } = string.Empty;
+    // Name of an inline SVG diagram shown instead of screenshots (see Pages/Shared/_ProjectDiagram.cshtml).
+    public string Diagram { get; init; } = string.Empty;
     public IReadOnlyList<string> Screenshots { get; init; } = [];
     public string FallbackImage { get; init; } = string.Empty;
     public IReadOnlyList<string> SkillsDemonstrated { get; init; } = [];

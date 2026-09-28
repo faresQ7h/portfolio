@@ -4,12 +4,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FaresPortfolio.Pages;
 
-public sealed class IndexModel(IPortfolioDataService portfolio, ProjectMediaService media) : PageModel
+public sealed class IndexModel(IPortfolioDataService portfolio, ProjectMediaService media, IWebHostEnvironment environment) : PageModel
 {
     public PortfolioProfile Profile { get; private set; } = new();
     public IReadOnlyList<ProjectCardModel> Projects { get; private set; } = [];
+    public IReadOnlyList<SkillUsageGroup> Skills { get; private set; } = [];
     public IReadOnlyList<TimelineEntry> Education { get; private set; } = [];
-    public IReadOnlyList<TimelineEntry> Experience { get; private set; } = [];
+
+    // Only set when the CV file is actually deployed, so the button never links to a 404.
+    public string? CvUrl { get; private set; }
 
     public async Task OnGetAsync(CancellationToken cancellationToken)
     {
@@ -17,17 +20,18 @@ public sealed class IndexModel(IPortfolioDataService portfolio, ProjectMediaServ
         var projects = await portfolio.GetProjectsAsync(cancellationToken);
 
         // Featured projects first; each group keeps its order from projects.json (OrderBy is stable).
-        Projects = projects
-            .OrderByDescending(project => project.Featured)
+        var ordered = projects.OrderByDescending(project => project.Featured).ToArray();
+
+        Projects = ordered
             .Select(project => new ProjectCardModel(project, media.GetCardImage(project)))
             .ToArray();
-
+        Skills = SkillUsage.Build(Profile.Skills, ordered);
         Education = Profile.Education
             .Select(item => new TimelineEntry(item.Period, item.School, item.Program, item.Details, item.Highlights))
             .ToArray();
-        Experience = Profile.Experience
-            .Select(item => new TimelineEntry(item.Period, item.Title, item.Organization, null, item.Details))
-            .ToArray();
+
+        var cvUrl = Profile.Personal.CvUrl;
+        CvUrl = !string.IsNullOrEmpty(cvUrl) && environment.WebRootFileProvider.GetFileInfo(cvUrl).Exists ? cvUrl : null;
 
         ViewData["IsHome"] = true;
         ViewData["Meta"] = new PageMeta

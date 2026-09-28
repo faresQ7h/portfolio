@@ -1,27 +1,23 @@
 {
   "personal": {
     "name": "Fares Mohamed",
-    "headline": "Informatics Student | Backend & Software Development | Systems Programming",
-    "summary": "I build software ranging from Linux systems programming in C to backend APIs, relational databases, desktop applications in C#/.NET, and full-stack web applications with ASP.NET. Currently studying Informatics at CZU and software engineering at 42 Prague.",
+    "headline": "I build backend services and systems software, from a Unix shell in C to a CI/CD-deployed ASP.NET app on Azure.",
+    "summary": "Informatics student at the Czech University of Life Sciences Prague (BSc expected 2027) and software engineering student at 42 Prague.",
     "location": "Prague, Czech Republic",
     "email": "hello@faresm.dev",
-    "phone": "+420 705 940 706",
     "githubUrl": "https://github.com/faresQ7h",
     "linkedInUrl": "https://www.linkedin.com/in/fares-mohamed-it/",
+    "cvUrl": "/assets/Fares_Mohamed_CV.pdf",
     "avatarUrl": "/assets/myProfile.jpeg"
   },
   "stats": [
-    {
-      "value": "13",
-      "label": "Public GitHub repositories"
-    },
     {
       "value": "120/180",
       "label": "ECTS credits completed"
     },
     {
       "value": "1.45",
-      "label": "Academic average at CZU"
+      "label": "average (CZU scale, 1.0 = best)"
     },
     {
       "value": "2027",
@@ -38,7 +34,7 @@
       "school": "Czech University of Life Sciences Prague (CZU)",
       "program": "Bachelor of Science in Informatics",
       "period": "Expected graduation: 2027",
-      "details": "Entering my 3rd year with 120 / 180 ECTS credits completed, maintaining an excellent academic average of 1.45 on the CZU grading scale.",
+      "details": "Entering my 3rd year with 120/180 ECTS credits completed and a 1.45 average (CZU scale, 1.0 = best). Achieved excellent grades in Mathematics I and Mathematics II and received a professor recommendation for academic performance and analytical ability.",
       "highlights": [
         "Algorithms & Data Structures",
         "Object-Oriented Programming",
@@ -56,31 +52,11 @@
       "period": "Expected completion: 2026–2027",
       "details": "Peer-to-peer program focused on systems programming, Linux/Unix, algorithms, software architecture, debugging, and collaborative software development.",
       "highlights": [
+        "Built Linux applications in C, including a Unix shell, focused on processes, memory, parsing, and low-level debugging",
         "C and C++ projects under strict coding standards",
         "Memory management and edge-case handling",
-        "Peer review and Git-based collaboration",
-        "Debugging with gdb and Valgrind"
-      ]
-    }
-  ],
-  "experience": [
-    {
-      "title": "Project-based software engineering",
-      "organization": "42 Prague and personal projects",
-      "period": "Current",
-      "details": [
-        "Built Linux-based applications in C, including a Unix shell and projects focused on processes, memory, parsing, and low-level debugging.",
-        "Created a normalized PostgreSQL hotel booking database with schema constraints, sample data, and SQL queries.",
-        "Built a C#/.NET WinForms inventory application using object-oriented design and local JSON persistence."
-      ]
-    },
-    {
-      "title": "Academic software development",
-      "organization": "CZU Informatics",
-      "period": "2024 - 2027 expected",
-      "details": [
-        "Studied software development, algorithms, data structures, databases, operating systems, computer networks, and computer architecture.",
-        "Achieved excellent grades in Mathematics I and Mathematics II and received a professor recommendation for academic performance and analytical ability."
+        "Debugging with gdb and Valgrind",
+        "Peer review and Git-based collaboration"
       ]
     }
   ],
@@ -102,56 +78,35 @@
       "focus": "Using APIs, LLMs, and automation tools to design practical workflows."
     }
   ],
+  "currentlyBuilding": {
+    "name": "AI Job Search Assistant",
+    "summary": "An n8n and LLM workflow to surface internship postings, draft tailored CVs and cover letters, and track applications. Early design stage, no public repo yet."
+  },
   "skills": [
     {
       "name": "Languages",
       "icon": "{ }",
-      "items": ["C", "C++", "C#", "Python", "JavaScript", "SQL", "Bash"]
+      "items": ["C", "C#", "SQL", "Python", "JavaScript", "C++", "Bash"]
     },
     {
-      "name": "Web Technologies",
-      "icon": "</>",
-      "items": ["HTML5", "CSS3"]
+      "name": "Systems & Linux",
+      "icon": ">_",
+      "items": ["Linux", "POSIX", "POSIX Threads", "GNU Readline", "gdb", "Valgrind"]
     },
     {
-      "name": "Frameworks & Platforms",
+      "name": "Backend & .NET",
       "icon": ".NET",
-      "items": [".NET", "ASP.NET", "WinForms"]
-    },
-    {
-      "name": "Backend & APIs",
-      "icon": "API",
-      "items": ["Backend Development", "Client-Server Architecture", "REST APIs", "HTTP/HTTPS", "API Integration"]
+      "items": ["ASP.NET Core", ".NET", "REST APIs", "JSON", "WinForms"]
     },
     {
       "name": "Databases",
       "icon": "DB",
-      "items": ["PostgreSQL", "Relational Database Design", "ER Modeling", "Normalization (3NF)", "Constraints & Data Integrity", "SQL Joins", "Aggregations", "Subqueries"]
+      "items": ["PostgreSQL", "PL/pgSQL", "ER Modeling", "Normalization (3NF)", "Constraints & Triggers"]
     },
     {
-      "name": "Data Formats",
-      "icon": "FMT",
-      "items": ["JSON", "XML", "CSV", "YAML", "Markdown"]
-    },
-    {
-      "name": "Linux",
-      "icon": ">_",
-      "items": ["Linux Mint", "Linux/Unix", "POSIX", "Command-Line Tools", "Process Management", "File I/O", "Shell Scripting", "SSH"]
-    },
-    {
-      "name": "Networking",
-      "icon": "IP",
-      "items": ["TCP/IP Fundamentals", "Computer Networking", "CCNA Preparation"]
-    },
-    {
-      "name": "Cloud & Deployment",
+      "name": "Cloud & Delivery",
       "icon": "AZ",
-      "items": ["Microsoft Azure", "Azure App Services", "Cloud Fundamentals", "Deployment & Hosting"]
-    },
-    {
-      "name": "Developer Tools",
-      "icon": "Git",
-      "items": ["Git", "GitHub", "Pull Requests", "Code Reviews", "gdb", "Valgrind", "Virtual Machines", "Agile/Scrum", "Visual Studio", "Visual Studio Code"]
+      "items": ["Azure App Service", "GitHub Actions", "OIDC", "xUnit", "Git"]
     }
   ]
 }
