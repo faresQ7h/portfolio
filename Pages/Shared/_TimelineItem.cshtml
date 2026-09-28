@@ -1,0 +1,19 @@
+@model TimelineEntry
+<article class="timeline-item">
+  <span class="timeline-period">@Model.Period</span>
+  <h3>@Model.Title</h3>
+  <p class="timeline-subtitle">@Model.Subtitle</p>
+  @if (!string.IsNullOrWhiteSpace(Model.Text))
+  {
+    <p>@Model.Text</p>
+  }
+  @if (Model.Bullets.Count > 0)
+  {
+    <ul class="clean-list">
+      @foreach (var bullet in Model.Bullets)
+      {
+        <li>@bullet</li>
+      }
+    </ul>
+  }
+</article>

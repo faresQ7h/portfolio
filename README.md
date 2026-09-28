@@ -80,11 +80,13 @@ All portfolio content is stored in JSON files, allowing projects, education, exp
 
 ```
 Controllers/        ASP.NET API endpoints
+Data/               Portfolio and project data (JSON)
 Models/             Data transfer objects (DTOs)
-Services/           JSON data services
+Pages/              Server-rendered Razor Pages
+Services/           JSON data and media services
+tests/              xUnit integration and unit tests
 
 wwwroot/
-├── api/            Portfolio and project data
 ├── assets/         Images, screenshots, icons
 ├── css/            Stylesheets
 ├── files/          Downloadable files
@@ -93,14 +95,14 @@ wwwroot/
 
 ### Data
 
-- `wwwroot/api/profile.json`
+- `Data/profile.json`
   - Personal information
   - Education
   - Experience
   - Skills
   - Learning roadmap
 
-- `wwwroot/api/projects.json`
+- `Data/projects.json`
   - Project cards
   - Project detail pages
   - Technologies
@@ -136,7 +138,7 @@ Projects are completely data-driven.
 
 To add or edit a project:
 
-1. Update `wwwroot/api/projects.json`
+1. Update `Data/projects.json`
 2. Give every project a unique `slug`
 3. Add screenshots under:
 

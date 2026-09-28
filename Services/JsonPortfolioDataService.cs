@@ -1,10 +1,15 @@
 using System.Text.Json;
 using FaresPortfolio.Models;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace FaresPortfolio.Services;
 
-public sealed class JsonPortfolioDataService(IWebHostEnvironment environment) : IPortfolioDataService
+// Portfolio content lives in Data/*.json, outside wwwroot, so the raw files are never served as
+// static files. Parsed data is cached in memory and evicted when its file changes, so edits to the
+// JSON still show up on the next request without a restart.
+public sealed class JsonPortfolioDataService(IWebHostEnvironment environment, IMemoryCache cache) : IPortfolioDataService
 {
+    private const string DataDirectory = "Data";
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
     public Task<PortfolioProfile> GetProfileAsync(CancellationToken cancellationToken)
@@ -26,11 +31,17 @@ public sealed class JsonPortfolioDataService(IWebHostEnvironment environment) : 
 
     private async Task<T> ReadJsonAsync<T>(string fileName, CancellationToken cancellationToken)
     {
-        var path = Path.Combine(environment.WebRootPath, "api", fileName);
+        var relativePath = $"{DataDirectory}/{fileName}";
 
-        await using var stream = File.OpenRead(path);
-        var data = await JsonSerializer.DeserializeAsync<T>(stream, JsonOptions, cancellationToken);
+        var data = await cache.GetOrCreateAsync(relativePath, async entry =>
+        {
+            entry.AddExpirationToken(environment.ContentRootFileProvider.Watch(relativePath));
 
-        return data ?? throw new InvalidOperationException($"Could not read portfolio data from {path}.");
+            var path = Path.Combine(environment.ContentRootPath, DataDirectory, fileName);
+            await using var stream = File.OpenRead(path);
+            return await JsonSerializer.DeserializeAsync<T>(stream, JsonOptions, cancellationToken);
+        });
+
+        return data ?? throw new InvalidOperationException($"Could not read portfolio data from {relativePath}.");
     }
 }

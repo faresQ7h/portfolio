@@ -750,6 +750,7 @@ h3 {
 }
 
 .project-thumb {
+  display: block;
   width: 140px;
   height: 80px;
   object-fit: contain; /* screenshots stay fully visible, never cropped */
@@ -759,6 +760,12 @@ h3 {
   padding: 4px;
   cursor: pointer;
   transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.project-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .project-thumb:hover {
@@ -988,7 +995,7 @@ h3 {
 
 /* smaller, more proportionate headline on project detail pages so long names
    don't wrap awkwardly and the screenshot gallery reads as the focal point */
-[data-project-name] {
+.project-title {
   font-size: clamp(2.1rem, 4.2vw, 3.6rem);
 }
 
@@ -1000,12 +1007,6 @@ h3 {
 
 .detail-block h2 {
   font-size: 1.3rem;
-}
-
-.load-error {
-  margin: 120px auto 0;
-  width: min(100% - 40px, var(--container));
-  color: var(--accent-strong);
 }
 
 @media (max-width: 980px) {
@@ -1087,7 +1088,6 @@ h3 {
     padding: 13px 16px;
   }
 
-  .nav-links.visible,
   .nav-links.is-open {
     display: flex;
     animation: nav-menu-in 180ms ease;
@@ -1169,7 +1169,7 @@ h3 {
     font-size: clamp(1.5rem, 7.5vw, 2.1rem);
   }
 
-  [data-project-name] {
+  .project-title {
     font-size: clamp(1.65rem, 9vw, 2.1rem);
   }
 

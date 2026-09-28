@@ -1,0 +1,24 @@
+@page "/status/{code:int}"
+@model StatusModel
+
+  <main id="main" class="project-detail">
+    <section class="section project-hero">
+      <div class="container">
+        <p class="eyebrow">@Model.Code</p>
+        @if (Model.IsNotFound)
+        {
+          <h1 class="project-title">Page not found</h1>
+          <p class="headline">The page you're looking for doesn't exist or has moved.</p>
+        }
+        else
+        {
+          <h1 class="project-title">Something went wrong</h1>
+          <p class="headline">The request couldn't be completed.</p>
+        }
+        <div class="hero-actions">
+          <a class="button button-primary" href="/">Return home</a>
+          <a class="button button-secondary" href="/#projects">All projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
