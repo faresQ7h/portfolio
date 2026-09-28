@@ -81,6 +81,35 @@
     ]
   },
   {
+    "slug": "ai-job-search-assistant",
+    "name": "AI Job Search Assistant",
+    "description": "A local, Docker-based job-search automation system that aggregates listings from multiple sources, filters and scores them, removes duplicates, and tracks applications in Google Sheets.",
+    "technologies": ["Python", "n8n", "Docker", "FastAPI", "REST APIs", "Google Sheets API", "JSON", "LLMs"],
+    "githubUrl": "",
+    "diagram": "job-search-pipeline",
+    "screenshots": [],
+    "fallbackImage": "",
+    "skillsDemonstrated": ["Workflow Automation", "API Integration", "LLM Integration", "Service Orchestration", "Data Processing"],
+    "status": "Completed",
+    "featured": true,
+    "overview": "A local, Docker-based job-search automation system that aggregates job listings from multiple sources, filters and scores them, removes duplicates, and tracks applications in Google Sheets. It is a personal project and runs locally in Docker.",
+    "architecture": "n8n orchestrates Python/FastAPI services running in Docker. The workflow pulls listings through a JobSpy integration and a dedicated Jobs.cz scraping service, scores their relevance with an LLM, and writes the results to Google Sheets, where applications are tracked.",
+    "keyFeatures": [
+      "Multi-source job search",
+      "JobSpy integration",
+      "Dedicated Jobs.cz scraping service",
+      "Job deduplication",
+      "Location and relevance filtering",
+      "LLM-based relevance scoring",
+      "Google Sheets read/write for application tracking",
+      "Local service orchestration with Docker"
+    ],
+    "challenges": [],
+    "engineeringDecisions": [],
+    "technologyNotes": "Python and FastAPI for the services, n8n for workflow orchestration, Docker to run the services locally, the Google Sheets API for application tracking, and an LLM for relevance scoring, connected through REST APIs and JSON.",
+    "lessonsLearned": []
+  },
+  {
     "slug": "hotel-booking-database",
     "name": "Hotel Booking Database",
     "description": "A normalized PostgreSQL database for hotel booking management, with trigger-driven price recalculation and automatic booking-status transitions.",
@@ -100,7 +129,8 @@
       "Automatic booking-status transitions driven by payment events",
       "CHECK-constraint-enforced business rules: positive prices, valid check-in/check-out ranges, adult-only customers, 1-5 star ratings",
       "Flexible price plans and hotel-specific extra services with optional per-booking usage limits",
-      "Payment tracking across multiple methods and statuses (pending, succeed, failed, refunded, under review)"
+      "Payment tracking across multiple methods and statuses (pending, succeed, failed, refunded, under review)",
+      "20+ SQL queries covering joins, aggregations and subqueries"
     ],
     "challenges": [
       "Keeping a booking's total price correct automatically as its rooms and extra services change, without relying on the application layer to recompute it",
@@ -130,7 +160,7 @@
     "fallbackImage": "/assets/projects/philosophers.svg",
     "skillsDemonstrated": ["Concurrency", "Systems Programming", "Debugging"],
     "status": "Completed",
-    "featured": true,
+    "featured": false,
     "overview": "An implementation of the classic Dining Philosophers concurrency problem in C using POSIX threads, where each philosopher runs as its own thread alternating between thinking, eating, and sleeping while sharing a fixed number of forks with its neighbors. The simulation enforces strict timing rules, a philosopher who doesn't eat before a configurable time-to-die limit is detected as dead, so correctness depends as much on precise timing as on avoiding deadlocks and race conditions.",
     "architecture": "Each philosopher runs on its own pthread executing a shared routine that cycles through thinking, taking two fork mutexes, eating, releasing them, and sleeping. A separate monitor thread runs concurrently, checking every philosopher's last-meal timestamp against the time-to-die limit to detect starvation without interrupting the eating threads. A dedicated timing helper breaks sleep calls into short intervals so the monitor can still detect a death promptly instead of oversleeping past the deadline.",
     "keyFeatures": [

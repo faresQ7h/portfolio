@@ -58,3 +58,56 @@
       <text class="diagram-caption" x="360" y="404" text-anchor="middle">no publish profile or client secret stored in GitHub</text>
     </svg>
 }
+else if (Model.Name == "job-search-pipeline")
+{
+    // Only the components the project actually has: n8n orchestrating Python/FastAPI services
+    // (JobSpy integration, Jobs.cz scraper), an LLM for relevance scoring, and Google Sheets.
+    var boxes = new (int X, int Y, int Width, string Title, string Detail, bool Accent)[]
+    {
+        (35, 134, 190, "JobSpy", "integration", false),
+        (35, 248, 190, "Jobs.cz", "scraping service", false),
+        (290, 158, 150, "n8n", "orchestration", true),
+        (495, 70, 210, "LLM", "relevance scoring", false),
+        (495, 246, 210, "Google Sheets", "application tracking", false)
+    };
+    const int boxHeight = 96;
+
+    <svg class="diagram" viewBox="0 0 720 420" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"
+         role="@(Model.Decorative ? null : "img")" aria-hidden="@(Model.Decorative ? "true" : null)"
+         aria-labelledby="@(Model.Decorative ? null : "jobsearch-title jobsearch-desc")" focusable="false">
+      @if (!Model.Decorative)
+      {
+        <title id="jobsearch-title">Architecture of the AI Job Search Assistant</title>
+        <desc id="jobsearch-desc">n8n orchestrates Python FastAPI services running locally in Docker. It pulls job listings from a JobSpy integration and a dedicated Jobs.cz scraping service, scores their relevance with an LLM, and reads and writes application tracking data in Google Sheets.</desc>
+      }
+      <defs>
+        <marker id="jobsearch-arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path class="diagram-arrowhead" d="M0 0 L10 5 L0 10 z"/>
+        </marker>
+      </defs>
+      <text class="diagram-caption" x="15" y="32">runs locally in Docker</text>
+
+      @* the Python/FastAPI services that feed listings into n8n *@
+      <g>
+        <rect class="diagram-box diagram-group" x="15" y="52" width="230" height="316" rx="12"/>
+        <text class="diagram-title" x="130" y="88" text-anchor="middle">FastAPI services</text>
+        <text class="diagram-detail" x="130" y="112" text-anchor="middle">Python</text>
+      </g>
+
+      @foreach (var box in boxes)
+      {
+          @* Wrapped in <g> so Razor doesn't read the SVG <text> elements as its own <text> tag. *@
+          <g>
+            <rect class="@(box.Accent ? "diagram-box diagram-box-accent" : "diagram-box")" x="@box.X" y="@box.Y" width="@box.Width" height="@boxHeight" rx="10"/>
+            <text class="diagram-title" x="@(box.X + box.Width / 2)" y="@(box.Y + 42)" text-anchor="middle">@box.Title</text>
+            <text class="diagram-detail" x="@(box.X + box.Width / 2)" y="@(box.Y + 70)" text-anchor="middle">@box.Detail</text>
+          </g>
+      }
+
+      <path class="diagram-arrow" d="M247 206 H288" marker-end="url(#jobsearch-arrowhead)"/>
+      <path class="diagram-arrow" d="M442 186 L493 124" marker-start="url(#jobsearch-arrowhead)" marker-end="url(#jobsearch-arrowhead)"/>
+      <path class="diagram-arrow" d="M442 226 L493 288" marker-start="url(#jobsearch-arrowhead)" marker-end="url(#jobsearch-arrowhead)"/>
+
+      <text class="diagram-caption" x="360" y="404" text-anchor="middle">aggregate · deduplicate · filter · score · track</text>
+    </svg>
+}

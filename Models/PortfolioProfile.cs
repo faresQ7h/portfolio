@@ -7,9 +7,9 @@ public sealed class PortfolioProfile
     public PersonalInfo Personal { get; init; } = new();
     public IReadOnlyList<StatItem> Stats { get; init; } = [];
     public IReadOnlyList<string> About { get; init; } = [];
+    public IReadOnlyList<SpokenLanguage> SpokenLanguages { get; init; } = [];
     public IReadOnlyList<EducationItem> Education { get; init; } = [];
     public IReadOnlyList<LearningItem> CurrentlyLearning { get; init; } = [];
-    public BuildingItem? CurrentlyBuilding { get; init; }
     public IReadOnlyList<SkillCategory> Skills { get; init; } = [];
 }
 
@@ -27,6 +27,12 @@ public sealed class PersonalInfo
     public string LinkedInUrl { get; init; } = string.Empty;
     public string CvUrl { get; init; } = string.Empty;
     public string AvatarUrl { get; init; } = string.Empty;
+}
+
+public sealed class SpokenLanguage
+{
+    public string Name { get; init; } = string.Empty;
+    public string Level { get; init; } = string.Empty;
 }
 
 public sealed class StatItem
@@ -48,13 +54,6 @@ public sealed class LearningItem
 {
     public string Name { get; init; } = string.Empty;
     public string Focus { get; init; } = string.Empty;
-}
-
-// Work in progress that isn't a project yet (no repo or implemented features), shown as a short note.
-public sealed class BuildingItem
-{
-    public string Name { get; init; } = string.Empty;
-    public string Summary { get; init; } = string.Empty;
 }
 
 public sealed class SkillCategory

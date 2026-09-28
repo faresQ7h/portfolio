@@ -514,6 +514,19 @@ h3 {
   margin: 0;
 }
 
+.prose .languages-line {
+  color: var(--text);
+  font-size: 0.98rem;
+}
+
+.languages-label {
+  margin-right: 10px;
+  color: var(--subtle);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
 .about-highlights {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -811,6 +824,11 @@ h3 {
   stroke: var(--accent);
 }
 
+.diagram-group {
+  fill: none;
+  stroke-dasharray: 6 5;
+}
+
 .diagram-title {
   fill: var(--text);
   font-size: 20px;
@@ -936,35 +954,13 @@ h3 {
 
 .learning-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
 }
 
 .learning-card p {
   margin-bottom: 0;
   color: var(--muted);
-}
-
-.building-note {
-  max-width: 820px;
-  margin: 24px 0 0;
-  border-left: 3px solid var(--accent);
-  padding: 4px 0 4px 16px;
-  color: var(--muted);
-}
-
-.building-label {
-  display: block;
-  margin-bottom: 4px;
-  color: var(--accent-strong);
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.building-note strong {
-  color: var(--text);
 }
 
 .learning-card-title {

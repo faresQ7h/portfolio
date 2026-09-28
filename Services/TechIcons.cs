@@ -19,6 +19,7 @@ public static class TechIcons
         ["PostgreSQL"] = "icon-postgresql",
         ["Linux"] = "icon-linux",
         ["Git"] = "icon-git",
+        ["Docker"] = "icon-docker",
         ["GitHub Actions"] = "icon-github"
     };
 

@@ -82,6 +82,13 @@
           {
             <p>@paragraph</p>
           }
+          @if (Model.Profile.SpokenLanguages.Count > 0)
+          {
+            <p class="languages-line">
+              <span class="languages-label">Languages</span>
+              @string.Join(" · ", Model.Profile.SpokenLanguages.Select(language => $"{language.Name} ({language.Level})"))
+            </p>
+          }
         </div>
         <div class="about-highlights" aria-label="Profile highlights">
           <article>
@@ -197,10 +204,6 @@
             </article>
           }
         </div>
-        @if (Model.Profile.CurrentlyBuilding is { } building)
-        {
-          <p class="building-note"><span class="building-label">Currently building</span> <strong>@building.Name</strong>. @building.Summary</p>
-        }
       </div>
     </section>
 

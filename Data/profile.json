@@ -27,14 +27,24 @@
   "about": [
     "I am an Informatics student at the Czech University of Life Sciences Prague and a current student at 42 Prague, focused on writing reliable, maintainable software through practical, project-based learning rather than theory alone.",
     "My strongest experience is in C systems programming, C#/.NET desktop development, PostgreSQL database design, and full-stack web development with ASP.NET, JavaScript, HTML, and CSS, applying object-oriented design, data structures, and software design principles to build software that behaves correctly under real constraints.",
-    "I am interested in backend engineering, systems programming, networking, cloud technologies, and automation. At the moment I am expanding into computer networking and Docker while preparing for the CCNA certification."
+    "I am interested in backend engineering, systems programming, networking, cloud technologies, and automation. At the moment I am expanding into computer networking while preparing for the CCNA certification, and deepening my Docker skills."
+  ],
+  "spokenLanguages": [
+    {
+      "name": "Arabic",
+      "level": "native"
+    },
+    {
+      "name": "English",
+      "level": "B2+, professional working proficiency"
+    }
   ],
   "education": [
     {
       "school": "Czech University of Life Sciences Prague (CZU)",
       "program": "Bachelor of Science in Informatics",
       "period": "Expected graduation: 2027",
-      "details": "Entering my 3rd year with 120/180 ECTS credits completed and a 1.45 average (CZU scale, 1.0 = best). Achieved excellent grades in Mathematics I and Mathematics II and received a professor recommendation for academic performance and analytical ability.",
+      "details": "In my 3rd and final year, with 120/180 ECTS credits completed and a 1.45 average (CZU scale, 1.0 = best). Achieved excellent grades in Mathematics I and Mathematics II and received a professor recommendation for academic performance and analytical ability.",
       "highlights": [
         "Algorithms & Data Structures",
         "Object-Oriented Programming",
@@ -67,21 +77,13 @@
     },
     {
       "name": "Docker",
-      "focus": "Containerizing applications and improving deployment workflows."
+      "focus": "Deepening existing Docker skills: containerizing applications and improving deployment workflows."
     },
     {
       "name": "Cloud Computing",
       "focus": "Cloud infrastructure fundamentals for backend and deployment work."
-    },
-    {
-      "name": "AI Workflow Automation",
-      "focus": "Using APIs, LLMs, and automation tools to design practical workflows."
     }
   ],
-  "currentlyBuilding": {
-    "name": "AI Job Search Assistant",
-    "summary": "An n8n and LLM workflow to surface internship postings, draft tailored CVs and cover letters, and track applications. Early design stage, no public repo yet."
-  },
   "skills": [
     {
       "name": "Languages",
@@ -96,7 +98,7 @@
     {
       "name": "Backend & .NET",
       "icon": ".NET",
-      "items": ["ASP.NET Core", ".NET", "REST APIs", "JSON", "WinForms"]
+      "items": ["ASP.NET Core", ".NET", "FastAPI", "REST APIs", "JSON", "WinForms"]
     },
     {
       "name": "Databases",
@@ -106,7 +108,12 @@
     {
       "name": "Cloud & Delivery",
       "icon": "AZ",
-      "items": ["Azure App Service", "GitHub Actions", "OIDC", "xUnit", "Git"]
+      "items": ["Azure App Service", "GitHub Actions", "OIDC", "Docker", "xUnit", "Git"]
+    },
+    {
+      "name": "Automation",
+      "icon": "n8n",
+      "items": ["n8n", "LLMs", "Google Sheets API"]
     }
   ]
 }

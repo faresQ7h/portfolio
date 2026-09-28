@@ -10,7 +10,7 @@ namespace FaresPortfolio.Tests;
 public sealed class ContentTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
 {
     private static readonly string[] FeaturedOrder =
-        ["minishell-42prague", "faresm-dev", "hotel-booking-database", "philosophers-42prague"];
+        ["minishell-42prague", "faresm-dev", "ai-job-search-assistant", "hotel-booking-database"];
 
     // Kept in the skills list at the owner's request even though no project on the site uses them.
     private static readonly string[] SkillsWithoutProjectEvidence = ["C++", "Bash"];
@@ -55,16 +55,73 @@ public sealed class ContentTests(WebApplicationFactory<Program> factory) : IClas
     }
 
     [Fact]
-    public async Task Unbuilt_ai_assistant_is_a_note_not_a_project()
+    public async Task Ai_job_search_assistant_is_a_completed_personal_project()
     {
-        var detail = await client.GetAsync("/projects/ai-job-search-assistant");
-        var apiProjects = await client.GetStringAsync("/api/projects");
+        var data = factory.Services.GetRequiredService<IPortfolioDataService>();
+        var project = await data.GetProjectBySlugAsync("ai-job-search-assistant", CancellationToken.None);
+        var home = WebUtility.HtmlDecode(await client.GetStringAsync("/"));
+
+        Assert.NotNull(project);
+        Assert.True(project.Featured);
+        Assert.Equal("Completed", project.Status);
+        Assert.Contains("Docker", project.Technologies);
+        Assert.DoesNotContain("Currently building", home);
+    }
+
+    [Fact]
+    public async Task Projects_without_a_repo_render_no_github_button()
+    {
+        var data = factory.Services.GetRequiredService<IPortfolioDataService>();
+        var projects = await data.GetProjectsAsync(CancellationToken.None);
+        var withoutRepo = projects.Where(project => string.IsNullOrEmpty(project.GitHubUrl)).ToArray();
+        var home = WebUtility.HtmlDecode(await client.GetStringAsync("/"));
+
+        Assert.NotEmpty(withoutRepo);
+        foreach (var project in withoutRepo)
+        {
+            Assert.DoesNotContain($"aria-label=\"View {project.Name} on GitHub\"", home);
+
+            var detail = await client.GetStringAsync($"/projects/{project.Slug}");
+            Assert.DoesNotContain("View GitHub", detail);
+            Assert.DoesNotContain("github.com", detail);
+        }
+
+        // ...while projects that do have a repo still get their button.
+        Assert.Contains("aria-label=\"View Minishell on GitHub\"", home);
+    }
+
+    [Fact]
+    public async Task Detail_page_hides_sections_that_have_no_content()
+    {
+        var html = await client.GetStringAsync("/projects/ai-job-search-assistant");
+
+        Assert.Contains("<h2>Overview</h2>", html);
+        Assert.Contains("<h2>Architecture</h2>", html);
+        Assert.Contains("<h2>Key Features</h2>", html);
+        Assert.DoesNotContain("<h2>Technical Challenges</h2>", html);
+        Assert.DoesNotContain("<h2>Engineering Decisions</h2>", html);
+        Assert.DoesNotContain("<h2>Lessons Learned</h2>", html);
+    }
+
+    [Fact]
+    public async Task Docker_is_shown_as_a_demonstrated_skill_not_just_learning()
+    {
+        var html = WebUtility.HtmlDecode(await client.GetStringAsync("/"));
+        var skillsStart = html.IndexOf("id=\"skills\"", StringComparison.Ordinal);
+        var skills = html[skillsStart..html.IndexOf("id=\"projects\"", skillsStart, StringComparison.Ordinal)];
+
+        Assert.Contains("<a href=\"/projects/ai-job-search-assistant\">AI Job Search Assistant</a>", skills);
+        Assert.Contains("Deepening existing Docker skills", html);
+        Assert.DoesNotContain("AI Workflow Automation", html);
+    }
+
+    [Fact]
+    public async Task About_lists_spoken_languages()
+    {
         var html = WebUtility.HtmlDecode(await client.GetStringAsync("/"));
 
-        Assert.Equal(HttpStatusCode.NotFound, detail.StatusCode);
-        Assert.DoesNotContain("ai-job-search-assistant", apiProjects);
-        Assert.Contains("Currently building", html);
-        Assert.Contains("AI Job Search Assistant", html);
+        Assert.Contains("Arabic (native)", html);
+        Assert.Contains("English (B2+, professional working proficiency)", html);
     }
 
     [Fact]
@@ -149,6 +206,8 @@ public sealed class ContentTests(WebApplicationFactory<Program> factory) : IClas
         var html = WebUtility.HtmlDecode(await client.GetStringAsync("/"));
 
         Assert.DoesNotContain("Applied practice", html);
+        Assert.Contains("3rd and final year", html);
+        Assert.DoesNotContain("Entering my 3rd year", html);
         Assert.Contains("professor recommendation", html);
         Assert.Contains("including a Unix shell", html);
     }
