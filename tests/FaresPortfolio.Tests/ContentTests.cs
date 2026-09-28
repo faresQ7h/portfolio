@@ -156,47 +156,37 @@ public sealed class ContentTests(WebApplicationFactory<Program> factory) : IClas
         var profile = await data.GetProfileAsync(CancellationToken.None);
         var html = WebUtility.HtmlDecode(await client.GetStringAsync("/"));
 
-        Assert.Contains(profile.Personal.Headline, html);
+        // the pitch keeps "CI/CD-deployed" on one line, so compare with that span removed
+        Assert.Contains(profile.Personal.Headline, html.Replace("<span class=\"nowrap\">", "").Replace("</span>", ""));
         Assert.Contains($"href=\"mailto:{profile.Personal.Email}\"", html);
         Assert.DoesNotContain(" | ", profile.Personal.Headline);
     }
 
     [Fact]
-    public async Task Cv_button_is_hidden_while_the_cv_file_is_missing()
+    public async Task Request_cv_button_opens_an_email_with_the_agreed_subject()
     {
+        var data = factory.Services.GetRequiredService<IPortfolioDataService>();
+        var profile = await data.GetProfileAsync(CancellationToken.None);
         var html = await client.GetStringAsync("/");
+        var api = await client.GetStringAsync("/api/profile");
 
+        Assert.Contains($"href=\"mailto:{profile.Personal.Email}?subject=CV%20request%20via%20faresm.dev\">Request CV</a>", html);
         Assert.DoesNotContain("Download CV", html);
-        Assert.Contains("Resume available upon request", html);
+        Assert.DoesNotContain("cvUrl", api, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
-    public async Task Cv_button_appears_once_the_cv_file_exists()
-    {
-        var webRoot = Directory.CreateTempSubdirectory("portfolio-webroot-");
-        try
-        {
-            Directory.CreateDirectory(Path.Combine(webRoot.FullName, "assets"));
-            await File.WriteAllTextAsync(Path.Combine(webRoot.FullName, "assets", "Fares_Mohamed_CV.pdf"), "%PDF-1.4");
-
-            using var withCv = factory.WithWebHostBuilder(builder => builder.UseWebRoot(webRoot.FullName));
-            var html = await withCv.CreateClient().GetStringAsync("/");
-
-            Assert.Contains("href=\"/assets/Fares_Mohamed_CV.pdf\" download>Download CV</a>", html);
-            Assert.DoesNotContain("Resume available upon request", html);
-        }
-        finally
-        {
-            webRoot.Delete(recursive: true);
-        }
-    }
-
-    [Fact]
-    public async Task Stats_explain_the_grading_scale_and_drop_the_repo_count()
+    public async Task Stats_show_final_year_average_scale_and_graduation()
     {
         var html = WebUtility.HtmlDecode(await client.GetStringAsync("/"));
+        var start = html.IndexOf("<dl class=\"stats\">", StringComparison.Ordinal);
+        var stats = html[start..html.IndexOf("</dl>", start, StringComparison.Ordinal)];
 
-        Assert.Contains("average (CZU scale, 1.0 = best)", html);
+        Assert.Contains("Final year", stats);
+        Assert.Contains("BSc Informatics, CZU", stats);
+        Assert.Contains("average (CZU scale, 1.0 = best)", stats);
+        Assert.Contains("2027", stats);
+        Assert.DoesNotContain("ECTS", stats);
         Assert.DoesNotContain("GitHub repositories", html);
     }
 
@@ -232,5 +222,107 @@ public sealed class ContentTests(WebApplicationFactory<Program> factory) : IClas
             JsonValueKind.Array => element.EnumerateArray().SelectMany(item => FindProperties(item, name)),
             _ => []
         };
+    }
+
+    [Fact]
+    public async Task Compact_cards_show_real_sessions_or_a_manifest_from_project_data()
+    {
+        var html = WebUtility.HtmlDecode(await client.GetStringAsync("/"));
+
+        // captured by building and running the public repos
+        Assert.Contains("./push_swap 5 1 4 2 3", html);
+        Assert.Contains("./philo 1 800 200 200", html);
+        Assert.Contains("800 1 died", html);
+        Assert.Contains("python3 expense_traker.py", html);
+        Assert.Contains("python3 miniGPT.py", html);
+        // the old placeholder illustrations and the stock philosophers image are gone
+        Assert.DoesNotContain("/assets/projects/", html);
+        Assert.DoesNotContain("philosophersSync.png", html);
+    }
+
+    [Fact]
+    public async Task Project_page_shows_the_full_session_with_its_source()
+    {
+        var html = WebUtility.HtmlDecode(await client.GetStringAsync("/projects/push-swap-42-project"));
+
+        var raw = await client.GetStringAsync("/projects/push-swap-42-project");
+
+        Assert.Contains("./push_swap $(shuf -i 1-100000 -n 100) | wc -l", html);
+        Assert.Contains("<span class=\"term-out\">570</span>", raw);
+        Assert.Contains("Real output from building and running the public repo.", html);
+    }
+
+    [Fact]
+    public async Task Terminal_text_is_html_encoded()
+    {
+        var html = await client.GetStringAsync("/projects/minishell-42prague");
+
+        Assert.Contains("cat &lt;&lt; EOF", html);
+        Assert.Contains("&gt; file.txt", html);
+    }
+
+    [Fact]
+    public async Task Theme_toggle_is_hidden_until_javascript_enables_it()
+    {
+        var html = await client.GetStringAsync("/");
+
+        Assert.Contains("data-theme-toggle aria-label=\"Switch theme\" hidden>", html);
+        Assert.Contains("/fonts/inter-latin.woff2", html);
+    }
+
+    [Fact]
+    public async Task Expense_excerpt_shows_every_step_that_changes_the_balance()
+    {
+        var html = WebUtility.HtmlDecode(await client.GetStringAsync("/projects/expense-tracker-python"));
+
+        Assert.Contains("==Current wallet balance:  0 $ ==", html);
+        Assert.Contains("Amount of 500 $ was added to the history", html);
+        Assert.Contains("==Current wallet balance:  380 $ ==", html);
+        Assert.Contains("the menu printed between steps, blank lines, and the final exit are left out", html);
+    }
+
+    [Fact]
+    public async Task Minishell_session_includes_the_rest_of_the_screenshot()
+    {
+        var html = WebUtility.HtmlDecode(await client.GetStringAsync("/projects/minishell-42prague"));
+
+        Assert.Contains("minishell: ff: command not found", html);
+        Assert.Contains("^C", html);
+    }
+
+    [Fact]
+    public async Task Project_pages_do_not_ship_the_unused_icon_sprite()
+    {
+        var html = await client.GetStringAsync("/projects/minishell-42prague");
+
+        Assert.DoesNotContain("<symbol id=\"icon-", html);
+    }
+
+    [Fact]
+    public async Task Hero_keeps_slashed_words_on_one_line()
+    {
+        var html = await client.GetStringAsync("/");
+
+        Assert.Contains("<span class=\"nowrap\">CI/CD-deployed</span>", html);
+    }
+
+    [Theory]
+    [InlineData("/")]
+    [InlineData("/?bg=dots")]
+    public async Task Hero_has_the_single_grid_background_and_no_variant_switch(string path)
+    {
+        var html = await client.GetStringAsync(path);
+
+        Assert.Contains("aria-labelledby=\"hero-name\" data-pointer-glow>", html);
+        Assert.DoesNotContain("data-hero-bg", html);
+    }
+
+    [Fact]
+    public async Task No_invented_contact_or_skills_copy()
+    {
+        var html = await client.GetStringAsync("/");
+
+        Assert.DoesNotContain("quickest way to reach me", html);
+        Assert.DoesNotContain("Each skill links to", html);
     }
 }

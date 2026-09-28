@@ -1,0 +1,12 @@
+@model TerminalModel
+@{
+    var session = Model.Session;
+}
+<figure class="@(Model.Compact ? "term term-compact" : "term")">
+  <div class="term-bar"><span>@session.Path</span></div>
+  <pre class="term-body"><code>@TerminalHtml.Render(session)</code></pre>
+  @if (Model.ShowCaption && !string.IsNullOrEmpty(session.Caption))
+  {
+    <figcaption class="term-caption">@session.Caption</figcaption>
+  }
+</figure>

@@ -2,75 +2,86 @@
 @model FaresPortfolio.Pages.Projects.DetailModel
 @{
     var project = Model.Project;
-    var mainImage = Model.Screenshots[0];
-    var hasGallery = Model.Screenshots.Count > 1;
+    var media = Model.Media;
+    var screenshots = Model.Screenshots;
+    var hasGallery = screenshots.Count > 1;
 }
 @section Scripts {
   <script src="~/js/project.js" asp-append-version="true" defer></script>
 }
 
-  <main id="main" class="project-detail">
-    <section class="section project-hero">
-      <div class="container project-detail-grid">
-        <div>
-          <a class="text-link back-link" href="/#projects"><span aria-hidden="true">&larr;</span> Back to projects</a>
-          <p class="eyebrow">@project.Status</p>
-          <h1 class="project-title">@project.Name</h1>
-          <p class="headline">@project.Description</p>
-          <div class="tag-row">
+  <main id="main" class="project-page">
+    <section class="detail-hero">
+      <div class="container detail-grid">
+        <div class="detail-copy">
+          <a class="back-link" href="/#projects"><span aria-hidden="true">&larr;</span> All projects</a>
+          <p class="meta"><span class="pill">@project.Status.ToLowerInvariant()</span><span>@string.Join(" / ", project.Technologies.Take(3))</span></p>
+          <h1 class="detail-title">@project.Name</h1>
+          <p class="detail-desc">@project.Description</p>
+          <ul class="tags" aria-label="Technologies">
             @foreach (var technology in project.Technologies)
             {
-              <span class="tag">@technology</span>
+              <li>@technology</li>
             }
-          </div>
+          </ul>
           <div class="hero-actions">
             @if (!string.IsNullOrEmpty(project.GitHubUrl))
             {
               @await Html.PartialAsync("_GitHubButton", new GitHubButtonModel(project.GitHubUrl, "button button-primary", "View GitHub"))
             }
-            <a class="button button-secondary" href="/#projects">All projects</a>
+            <a class="button" href="/#projects">All projects</a>
           </div>
         </div>
-        <div class="project-gallery">
-          @if (!string.IsNullOrEmpty(project.Diagram))
+
+        <div class="detail-media">
+          @if (media.Kind == ProjectMediaKind.Diagram)
           {
-            <figure class="project-diagram">
-              <partial name="_ProjectDiagram" model="new DiagramModel(project.Diagram, Decorative: false)" />
+            <figure class="media-frame media-diagram">
+              <partial name="_ProjectDiagram" model="new DiagramModel(media.Diagram!, Decorative: false)" />
             </figure>
           }
-          else
+          else if (media.Kind == ProjectMediaKind.Terminal)
           {
-            <div class="project-gallery-hero" data-gallery data-gallery-label="@project.Name screenshot gallery, use the arrow buttons or left/right arrow keys to browse">
-              <img class="project-shot large" data-gallery-image src="@mainImage.Url" alt="@project.Name project screenshot"
-                   width="@(mainImage.Size?.Width ?? 720)" height="@(mainImage.Size?.Height ?? 420)" loading="eager">
-              @if (hasGallery)
-              {
-                <button class="gallery-arrow gallery-arrow-prev" type="button" data-gallery-prev aria-label="Previous screenshot" hidden>&#10094;</button>
-                <button class="gallery-arrow gallery-arrow-next" type="button" data-gallery-next aria-label="Next screenshot" hidden>&#10095;</button>
-              }
-            </div>
-            @if (hasGallery)
-            {
-              <div class="project-thumb-row" aria-label="@project.Name screenshots">
-                @for (var index = 0; index < Model.Screenshots.Count; index++)
+            <partial name="_Terminal" model="new TerminalModel(media.Terminal!, Compact: false, ShowCaption: true)" />
+          }
+
+          @if (screenshots.Count > 0)
+          {
+            var mainImage = screenshots[0];
+            <div class="gallery">
+              <div class="gallery-stage media-frame" data-gallery data-gallery-label="@project.Name screenshot gallery, use the arrow buttons or left/right arrow keys to browse">
+                <img class="gallery-image" data-gallery-image src="@mainImage.Url" alt="@project.Name screenshot"
+                     width="@(mainImage.Size?.Width ?? 720)" height="@(mainImage.Size?.Height ?? 420)"
+                     loading="@(media.Kind == ProjectMediaKind.Image ? "eager" : "lazy")" decoding="async">
+                @if (hasGallery)
                 {
-                  var shot = Model.Screenshots[index];
-                  var isFirst = index == 0;
-                  @* Real links to the full image, so the thumbnails still work without JavaScript. *@
-                  <a class="@(isFirst ? "project-thumb is-active" : "project-thumb")" href="@shot.Url" data-gallery-thumb
-                     data-width="@shot.Size?.Width" data-height="@shot.Size?.Height"
-                     aria-label="Show screenshot @(index + 1) of @Model.Screenshots.Count" aria-current="@(isFirst ? "true" : null)">
-                    <img src="@shot.Url" alt="" width="160" height="94" loading="lazy" decoding="async">
-                  </a>
+                  <button class="gallery-arrow gallery-arrow-prev" type="button" data-gallery-prev aria-label="Previous screenshot" hidden>&#10094;</button>
+                  <button class="gallery-arrow gallery-arrow-next" type="button" data-gallery-next aria-label="Next screenshot" hidden>&#10095;</button>
                 }
               </div>
-            }
+              @if (hasGallery)
+              {
+                <div class="thumb-row" role="group" aria-label="@project.Name screenshots">
+                  @for (var index = 0; index < screenshots.Count; index++)
+                  {
+                    var shot = screenshots[index];
+                    var isFirst = index == 0;
+                    @* Real links to the full image, so the thumbnails still work without JavaScript. *@
+                    <a class="@(isFirst ? "thumb is-active" : "thumb")" href="@shot.Url" data-gallery-thumb
+                       data-width="@shot.Size?.Width" data-height="@shot.Size?.Height"
+                       aria-label="Show screenshot @(index + 1) of @screenshots.Count" aria-current="@(isFirst ? "true" : null)">
+                      <img src="@shot.Url" alt="" width="160" height="100" loading="lazy" decoding="async">
+                    </a>
+                  }
+                </div>
+              }
+            </div>
           }
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section detail-body" data-reveal>
       <div class="container detail-sections">
         @foreach (var block in Model.Sections)
         {
@@ -78,7 +89,7 @@
             <h2>@block.Title</h2>
             @if (block.Items.Count > 0)
             {
-              <ul class="clean-list">
+              <ul>
                 @foreach (var item in block.Items)
                 {
                   <li>@item</li>

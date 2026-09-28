@@ -31,7 +31,7 @@ The site is served on the custom domain faresm.dev over HTTPS, with HSTS enabled
 
 ## Project structure
 
-```
+```text
 Controllers/        REST API endpoints
 Data/               Portfolio and project content (JSON)
 Models/             Content models
@@ -41,6 +41,7 @@ tests/              xUnit integration and unit tests
 wwwroot/
 ├── assets/         Images, screenshots, icons
 ├── css/            Stylesheet
+├── fonts/          Self-hosted Inter and JetBrains Mono (SIL OFL)
 └── js/             Progressive-enhancement scripts
 ```
 
@@ -75,7 +76,9 @@ Projects and profile content are data-driven; no code changes are needed to edit
 ]
 ```
 
-Every image in the folder is picked up automatically. Projects without screenshots fall back to their illustration.
+Every image in the folder is picked up automatically.
+
+A project can also carry a real terminal session under `terminal` (commands and their actual output, with a caption saying where the session came from). Projects with neither screenshots nor a session get a small terminal card generated only from their own data (language, stack, focus, status).
 
 Each skill in `Data/profile.json` shows which projects use it, matched by name against each project's `technologies` list.
 

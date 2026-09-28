@@ -6,8 +6,117 @@
     "technologies": ["C", "POSIX", "Linux", "Unix", "GNU Readline", "Git", "gdb", "Valgrind"],
     "githubUrl": "https://github.com/faresQ7h/minishell-42Prague",
     "diagram": "",
+    "terminal": {
+      "path": "~/minishell",
+      "prompt": "minishell$",
+      "caption": "A session from the project's own screenshot, typed out as text.",
+      "lines": [
+        {
+          "kind": "command",
+          "text": "echo hello"
+        },
+        {
+          "kind": "output",
+          "text": "hello"
+        },
+        {
+          "kind": "command",
+          "text": "export TEST=42"
+        },
+        {
+          "kind": "command",
+          "text": "env | grep ^TEST="
+        },
+        {
+          "kind": "output",
+          "text": "TEST=42"
+        },
+        {
+          "kind": "command",
+          "text": "echo $TEST"
+        },
+        {
+          "kind": "output",
+          "text": "42"
+        },
+        {
+          "kind": "command",
+          "text": "cat << EOF"
+        },
+        {
+          "kind": "input",
+          "text": "> ",
+          "value": "hello world"
+        },
+        {
+          "kind": "input",
+          "text": "> ",
+          "value": "$USER"
+        },
+        {
+          "kind": "input",
+          "text": "> ",
+          "value": "EOF"
+        },
+        {
+          "kind": "output",
+          "text": "hello world\nfarmoham"
+        },
+        {
+          "kind": "command",
+          "text": "echo \"hello world $USER\" > file.txt"
+        },
+        {
+          "kind": "command",
+          "text": "cat file.txt"
+        },
+        {
+          "kind": "output",
+          "text": "hello world farmoham"
+        },
+        {
+          "kind": "command",
+          "text": "echo \""
+        },
+        {
+          "kind": "error",
+          "text": "minishell: syntax error: unclosed quote"
+        },
+        {
+          "kind": "command",
+          "text": "^C"
+        },
+        {
+          "kind": "command",
+          "text": "^C"
+        },
+        {
+          "kind": "command",
+          "text": "^C"
+        },
+        {
+          "kind": "command",
+          "text": "^C"
+        },
+        {
+          "kind": "command",
+          "text": "ff"
+        },
+        {
+          "kind": "error",
+          "text": "minishell: ff: command not found"
+        },
+        {
+          "kind": "command",
+          "text": ""
+        },
+        {
+          "kind": "output",
+          "text": "exit"
+        }
+      ]
+    },
     "screenshots": ["/assets/minishell/"],
-    "fallbackImage": "/assets/projects/minishell.svg",
     "skillsDemonstrated": ["Systems Programming", "Linux", "Debugging", "Memory Management", "Git Collaboration"],
     "status": "Completed",
     "featured": true,
@@ -47,7 +156,6 @@
     "githubUrl": "https://github.com/faresQ7h/portfolio",
     "diagram": "deployment-pipeline",
     "screenshots": [],
-    "fallbackImage": "",
     "skillsDemonstrated": ["Backend", "CI/CD", "Cloud Deployment", "Automated Testing"],
     "status": "Live",
     "featured": true,
@@ -88,7 +196,6 @@
     "githubUrl": "",
     "diagram": "job-search-pipeline",
     "screenshots": [],
-    "fallbackImage": "",
     "skillsDemonstrated": ["Workflow Automation", "API Integration", "LLM Integration", "Service Orchestration", "Data Processing"],
     "status": "Completed",
     "featured": true,
@@ -117,7 +224,6 @@
     "githubUrl": "https://github.com/faresQ7h/hotel-booking-system-database",
     "diagram": "",
     "screenshots": ["/assets/HotelBokking_DB/"],
-    "fallbackImage": "/assets/projects/database.svg",
     "skillsDemonstrated": ["Database Design", "SQL", "Data Integrity"],
     "status": "Completed",
     "featured": true,
@@ -156,8 +262,30 @@
     "technologies": ["C", "POSIX Threads", "Linux"],
     "githubUrl": "https://github.com/faresQ7h/philosophers-42Prague",
     "diagram": "",
-    "screenshots": ["/assets/philosophers/"],
-    "fallbackImage": "/assets/projects/philosophers.svg",
+    "terminal": {
+      "path": "~/philosophers/philo",
+      "prompt": "$",
+      "caption": "Real output from building and running the public repo.",
+      "lines": [
+        {
+          "kind": "command",
+          "text": "./philo 1 800 200 200"
+        },
+        {
+          "kind": "output",
+          "text": "0 1 has taken a fork\n800 1 died"
+        },
+        {
+          "kind": "command",
+          "text": "./philo 4 410 200 200 1"
+        },
+        {
+          "kind": "output",
+          "text": "0 1 has taken a fork\n0 1 has taken a fork\n0 1 is eating\n0 3 has taken a fork\n0 3 has taken a fork\n0 3 is eating\n200 4 has taken a fork\n200 4 has taken a fork\n200 4 is eating\n200 2 has taken a fork\n200 2 has taken a fork\n200 2 is eating"
+        }
+      ]
+    },
+    "screenshots": [],
     "skillsDemonstrated": ["Concurrency", "Systems Programming", "Debugging"],
     "status": "Completed",
     "featured": false,
@@ -194,7 +322,6 @@
     "githubUrl": "https://github.com/faresQ7h/business-inventory-management-app-winforms-csharp",
     "diagram": "",
     "screenshots": ["/assets/Inventory_managment_winformApp/"],
-    "fallbackImage": "/assets/projects/inventory.svg",
     "skillsDemonstrated": ["Desktop Development", "OOP", "Software Design"],
     "status": "Completed",
     "featured": false,
@@ -231,7 +358,6 @@
     "githubUrl": "https://github.com/faresQ7h/fract-ol-42-project",
     "diagram": "",
     "screenshots": ["/assets/fract-ol/"],
-    "fallbackImage": "/assets/projects/fractol.svg",
     "skillsDemonstrated": ["Graphics Programming", "Mathematical Logic", "Input Handling"],
     "status": "Completed",
     "featured": false,
@@ -266,7 +392,38 @@
     "technologies": ["C", "Algorithms", "Data Structures"],
     "githubUrl": "https://github.com/faresQ7h/push_swap-42-project",
     "diagram": "",
-    "screenshots": ["/assets/projects/pushswap.svg"],
+    "terminal": {
+      "path": "~/push_swap",
+      "prompt": "$",
+      "caption": "Real output from building and running the public repo.",
+      "lines": [
+        {
+          "kind": "command",
+          "text": "./push_swap 5 1 4 2 3"
+        },
+        {
+          "kind": "output",
+          "text": "pb\npb\nra\npa\npa\nra"
+        },
+        {
+          "kind": "command",
+          "text": "./push_swap $(shuf -i 1-100000 -n 100) | wc -l"
+        },
+        {
+          "kind": "output",
+          "text": "570"
+        },
+        {
+          "kind": "command",
+          "text": "./push_swap 1 2 2"
+        },
+        {
+          "kind": "error",
+          "text": "Error"
+        }
+      ]
+    },
+    "screenshots": [],
     "skillsDemonstrated": ["Algorithms", "Data Structures", "Optimization"],
     "status": "Completed",
     "featured": false,
@@ -300,7 +457,104 @@
     "technologies": ["Python", "JSON"],
     "githubUrl": "https://github.com/faresQ7h/expense_tracker-programe-in-python",
     "diagram": "",
-    "screenshots": ["/assets/projects/expense.svg"],
+    "terminal": {
+      "path": "~/expense_tracker",
+      "prompt": "$",
+      "caption": "Excerpt from a real session of the public repo: the menu printed between steps, blank lines, and the final exit are left out.",
+      "lines": [
+        {
+          "kind": "command",
+          "text": "python3 expense_traker.py"
+        },
+        {
+          "kind": "input",
+          "text": "Do you want upload your last data changes? (y/n): ",
+          "value": "n"
+        },
+        {
+          "kind": "output",
+          "text": "==Current wallet balance:  0 $ ==\nWARNING: Your wallet balance is low! Income is required."
+        },
+        {
+          "kind": "note",
+          "text": "# … menu omitted"
+        },
+        {
+          "kind": "input",
+          "text": "chose one of the previous options: ",
+          "value": "4"
+        },
+        {
+          "kind": "output",
+          "text": "(Enter 0 to exit)"
+        },
+        {
+          "kind": "input",
+          "text": "How much do you want to add to wallet? ",
+          "value": "500"
+        },
+        {
+          "kind": "input",
+          "text": "Enter a description for it: ",
+          "value": "part-time job"
+        },
+        {
+          "kind": "output",
+          "text": "Amount of 500 $ was added to the history successufully!\n(Enter 0 to exit)"
+        },
+        {
+          "kind": "input",
+          "text": "How much do you want to add to wallet? ",
+          "value": "0"
+        },
+        {
+          "kind": "output",
+          "text": "==Current wallet balance:  500 $ =="
+        },
+        {
+          "kind": "note",
+          "text": "# … menu omitted"
+        },
+        {
+          "kind": "input",
+          "text": "chose one of the previous options: ",
+          "value": "1"
+        },
+        {
+          "kind": "output",
+          "text": "(Enter 0 to exit)"
+        },
+        {
+          "kind": "input",
+          "text": "How much is the expense? ",
+          "value": "120"
+        },
+        {
+          "kind": "input",
+          "text": "what category is the expense? ",
+          "value": "groceries"
+        },
+        {
+          "kind": "input",
+          "text": "Add a description for the expense: ",
+          "value": "weekly shopping"
+        },
+        {
+          "kind": "output",
+          "text": "Expense number: 1 was added to the history successufully!\n(Enter 0 to exit)"
+        },
+        {
+          "kind": "input",
+          "text": "How much is the expense? ",
+          "value": "0"
+        },
+        {
+          "kind": "output",
+          "text": "==Current wallet balance:  380 $ =="
+        }
+      ]
+    },
+    "screenshots": [],
     "skillsDemonstrated": ["Python", "Data Persistence", "CLI Application Logic"],
     "status": "Completed",
     "featured": false,
@@ -336,7 +590,49 @@
     "technologies": ["Python", "Ollama", "LLaMA3", "REST APIs"],
     "githubUrl": "https://github.com/faresQ7h/miniGPT",
     "diagram": "",
-    "screenshots": ["/assets/projects/minigpt.svg"],
+    "terminal": {
+      "path": "~/miniGPT",
+      "prompt": "$",
+      "caption": "Real run of the public repo against a local Ollama llama3 model. Blank lines are left out, and the model's replies differ between runs.",
+      "lines": [
+        {
+          "kind": "command",
+          "text": "python3 miniGPT.py"
+        },
+        {
+          "kind": "output",
+          "text": "Simple Local AI Chat\n------------------------------\nType 'exit' to quit"
+        },
+        {
+          "kind": "input",
+          "text": "You > ",
+          "value": "In one sentence: what does a Unix shell do?"
+        },
+        {
+          "kind": "output",
+          "text": "AI >\nA Unix shell is a command-line interface that allows users to interact with the\noperating system by typing commands and receiving output, providing a way to\nmanage files, directories, processes, and system resources.\n------------------------------"
+        },
+        {
+          "kind": "input",
+          "text": "You > ",
+          "value": "What did I just ask you? Answer in one sentence."
+        },
+        {
+          "kind": "output",
+          "text": "AI >\nYou asked me what a Unix shell does in one sentence.\n------------------------------"
+        },
+        {
+          "kind": "input",
+          "text": "You > ",
+          "value": "exit"
+        },
+        {
+          "kind": "output",
+          "text": "Bye."
+        }
+      ]
+    },
+    "screenshots": [],
     "skillsDemonstrated": ["Automation", "Local AI Tooling", "REST API Integration"],
     "status": "Completed",
     "featured": false,

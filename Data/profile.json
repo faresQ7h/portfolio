@@ -7,13 +7,12 @@
     "email": "hello@faresm.dev",
     "githubUrl": "https://github.com/faresQ7h",
     "linkedInUrl": "https://www.linkedin.com/in/fares-mohamed-it/",
-    "cvUrl": "/assets/Fares_Mohamed_CV.pdf",
     "avatarUrl": "/assets/myProfile.jpeg"
   },
   "stats": [
     {
-      "value": "120/180",
-      "label": "ECTS credits completed"
+      "value": "Final year",
+      "label": "BSc Informatics, CZU"
     },
     {
       "value": "1.45",

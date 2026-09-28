@@ -11,12 +11,20 @@ public sealed record ProjectImage(string Url, ImageDimensions? Size)
     public bool NeedsContainFit => Size is { } size && (double)size.Width / size.Height is > 2.2 or < 0.45;
 }
 
+public enum ProjectMediaKind
+{
+    Diagram,
+    Terminal,
+    Image
+}
+
+// What represents a project visually: an inline diagram, a terminal session, or a screenshot.
+public sealed record ProjectMedia(ProjectMediaKind Kind, string? Diagram = null, TerminalSession? Terminal = null, ProjectImage? Image = null);
+
 // Resolves project media from wwwroot/assets. A screenshot entry ending in "/" refers to a whole
 // folder, so galleries stay in sync with the filesystem without hardcoding filenames.
 public sealed class ProjectMediaService(IWebHostEnvironment environment)
 {
-    public const string PlaceholderImage = "/assets/projects/placeholder.svg";
-
     private const string AssetsPrefix = "/assets/";
     private static readonly string[] AllowedExtensions = [".png", ".jpg", ".jpeg", ".svg", ".webp", ".gif"];
 
@@ -67,17 +75,17 @@ public sealed class ProjectMediaService(IWebHostEnvironment environment)
         return urls.Select(Describe).OfType<ProjectImage>().ToArray();
     }
 
-    // The image shown on a project's card: its first screenshot, else its illustration, else the placeholder.
-    public ProjectImage GetCardImage(Project project)
+    // The media shown for a project: its diagram, else its real terminal session, else its first
+    // screenshot, else a short manifest generated from the project's own data.
+    public ProjectMedia GetPrimaryMedia(Project project)
     {
-        return GetScreenshots(project).FirstOrDefault() ?? GetFallbackImage(project);
-    }
+        if (!string.IsNullOrEmpty(project.Diagram)) return new ProjectMedia(ProjectMediaKind.Diagram, Diagram: project.Diagram);
+        if (project.Terminal is { Lines.Count: > 0 } terminal) return new ProjectMedia(ProjectMediaKind.Terminal, Terminal: terminal);
 
-    public ProjectImage GetFallbackImage(Project project)
-    {
-        return (string.IsNullOrEmpty(project.FallbackImage) ? null : Describe(project.FallbackImage))
-            ?? Describe(PlaceholderImage)
-            ?? new ProjectImage(PlaceholderImage, null);
+        var screenshot = GetScreenshots(project).FirstOrDefault();
+        return screenshot is not null
+            ? new ProjectMedia(ProjectMediaKind.Image, Image: screenshot)
+            : new ProjectMedia(ProjectMediaKind.Terminal, Terminal: ProjectManifest.For(project));
     }
 
     // Null when the URL doesn't point at an existing file under wwwroot.

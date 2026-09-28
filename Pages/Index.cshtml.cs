@@ -4,34 +4,33 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FaresPortfolio.Pages;
 
-public sealed class IndexModel(IPortfolioDataService portfolio, ProjectMediaService media, IWebHostEnvironment environment) : PageModel
+public sealed class IndexModel(IPortfolioDataService portfolio, ProjectMediaService media) : PageModel
 {
+    public const string CvRequestSubject = "CV request via faresm.dev";
+
     public PortfolioProfile Profile { get; private set; } = new();
-    public IReadOnlyList<ProjectCardModel> Projects { get; private set; } = [];
+    public IReadOnlyList<ProjectCardModel> FeaturedProjects { get; private set; } = [];
+    public IReadOnlyList<ProjectCardModel> OtherProjects { get; private set; } = [];
     public IReadOnlyList<SkillUsageGroup> Skills { get; private set; } = [];
     public IReadOnlyList<TimelineEntry> Education { get; private set; } = [];
 
-    // Only set when the CV file is actually deployed, so the button never links to a 404.
-    public string? CvUrl { get; private set; }
+    public string EmailHref => $"mailto:{Profile.Personal.Email}";
+    public string RequestCvHref => $"mailto:{Profile.Personal.Email}?subject={Uri.EscapeDataString(CvRequestSubject)}";
 
     public async Task OnGetAsync(CancellationToken cancellationToken)
     {
         Profile = await portfolio.GetProfileAsync(cancellationToken);
         var projects = await portfolio.GetProjectsAsync(cancellationToken);
 
-        // Featured projects first; each group keeps its order from projects.json (OrderBy is stable).
-        var ordered = projects.OrderByDescending(project => project.Featured).ToArray();
+        // Featured projects first; each group keeps its order from projects.json.
+        var cards = projects.Select(project => new ProjectCardModel(project, media.GetPrimaryMedia(project))).ToArray();
+        FeaturedProjects = cards.Where(card => card.Project.Featured).ToArray();
+        OtherProjects = cards.Where(card => !card.Project.Featured).ToArray();
 
-        Projects = ordered
-            .Select(project => new ProjectCardModel(project, media.GetCardImage(project)))
-            .ToArray();
-        Skills = SkillUsage.Build(Profile.Skills, ordered);
+        Skills = SkillUsage.Build(Profile.Skills, [.. FeaturedProjects.Concat(OtherProjects).Select(card => card.Project)]);
         Education = Profile.Education
             .Select(item => new TimelineEntry(item.Period, item.School, item.Program, item.Details, item.Highlights))
             .ToArray();
-
-        var cvUrl = Profile.Personal.CvUrl;
-        CvUrl = !string.IsNullOrEmpty(cvUrl) && environment.WebRootFileProvider.GetFileInfo(cvUrl).Exists ? cvUrl : null;
 
         ViewData["IsHome"] = true;
         ViewData["Meta"] = new PageMeta

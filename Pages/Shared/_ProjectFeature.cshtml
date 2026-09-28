@@ -3,16 +3,22 @@
     var project = Model.Project;
     var detailsUrl = $"/projects/{project.Slug}";
 }
-<article class="card">
-  <div class="card-media">
+<article class="feature">
+  <div class="feature-media">
     <partial name="_ProjectMedia" model="Model" />
   </div>
-  <div class="card-body">
+  <div class="feature-body">
     <p class="meta"><span class="pill">@project.Status.ToLowerInvariant()</span><span>@string.Join(" / ", project.Technologies.Take(3))</span></p>
-    <h4 class="card-title"><a href="@detailsUrl">@project.Name</a></h4>
-    <p class="card-desc">@project.Description</p>
+    <h3 class="feature-title"><a href="@detailsUrl">@project.Name</a></h3>
+    <p class="feature-desc">@project.Description</p>
+    <ul class="tags" aria-label="Skills demonstrated">
+      @foreach (var skill in project.SkillsDemonstrated.Take(4))
+      {
+        <li>@skill</li>
+      }
+    </ul>
     <div class="link-row">
-      <a class="text-link" href="@detailsUrl">Details<span class="sr-only"> about @project.Name</span></a>
+      <a class="text-link" href="@detailsUrl">Read the details<span class="sr-only"> about @project.Name</span></a>
       @if (!string.IsNullOrEmpty(project.GitHubUrl))
       {
         @await Html.PartialAsync("_GitHubButton", new GitHubButtonModel(project.GitHubUrl, "text-link", "GitHub", $"View {project.Name} on GitHub"))

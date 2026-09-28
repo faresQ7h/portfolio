@@ -1,15 +1,15 @@
 @model TimelineEntry
-<article class="timeline-item">
-  <span class="timeline-period">@Model.Period</span>
-  <h3>@Model.Title</h3>
-  <p class="timeline-subtitle">@Model.Subtitle</p>
+<article class="edu">
+  <p class="edu-period">@Model.Period</p>
+  <h3 class="edu-school">@Model.Title</h3>
+  <p class="edu-program">@Model.Subtitle</p>
   @if (!string.IsNullOrWhiteSpace(Model.Text))
   {
-    <p>@Model.Text</p>
+    <p class="edu-text">@Model.Text</p>
   }
   @if (Model.Bullets.Count > 0)
   {
-    <ul class="clean-list">
+    <ul class="edu-list">
       @foreach (var bullet in Model.Bullets)
       {
         <li>@bullet</li>

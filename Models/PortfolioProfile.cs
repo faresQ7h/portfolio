@@ -25,7 +25,6 @@ public sealed class PersonalInfo
 
     [JsonPropertyName("linkedInUrl")]
     public string LinkedInUrl { get; init; } = string.Empty;
-    public string CvUrl { get; init; } = string.Empty;
     public string AvatarUrl { get; init; } = string.Empty;
 }
 

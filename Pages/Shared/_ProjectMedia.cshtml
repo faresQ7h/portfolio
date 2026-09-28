@@ -1,0 +1,25 @@
+@model ProjectCardModel
+@{
+    var project = Model.Project;
+    var media = Model.Media;
+}
+@switch (media.Kind)
+{
+    case ProjectMediaKind.Diagram:
+        <div class="media-frame media-diagram">
+          <partial name="_ProjectDiagram" model="new DiagramModel(media.Diagram!, Decorative: true)" />
+        </div>
+        break;
+    case ProjectMediaKind.Terminal:
+        @* On the home page every terminal is a preview; the project page shows the whole session. *@
+        <partial name="_Terminal" model="new TerminalModel(media.Terminal!, Compact: true)" />
+        break;
+    default:
+        var image = media.Image!;
+        var imageClass = image.NeedsContainFit || project.Featured ? "media-image fit-contain" : "media-image";
+        <div class="media-frame">
+          <img class="@imageClass" src="@image.Url" alt="@project.Name screenshot"
+               width="@(image.Size?.Width ?? 720)" height="@(image.Size?.Height ?? 420)" loading="lazy" decoding="async">
+        </div>
+        break;
+}

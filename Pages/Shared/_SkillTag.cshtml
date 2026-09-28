@@ -3,14 +3,14 @@
     var asset = TechIcons.AssetFor(Model);
     var symbol = TechIcons.SymbolFor(Model);
 }
-<span class="tag">
+<span class="skill-name">
   @if (asset is not null)
   {
-    <img class="tag-icon" src="@asset" alt="" width="14" height="14" decoding="async">
+    <img class="skill-icon" src="@asset" alt="" width="16" height="16" decoding="async">
   }
   else if (symbol is not null)
   {
-    <svg class="tag-icon" aria-hidden="true" focusable="false"><use href="#@symbol"></use></svg>
+    <svg class="skill-icon" aria-hidden="true" focusable="false"><use href="#@symbol"></use></svg>
   }
   @Model
 </span>

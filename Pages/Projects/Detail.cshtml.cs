@@ -8,6 +8,7 @@ namespace FaresPortfolio.Pages.Projects;
 public sealed class DetailModel(IPortfolioDataService portfolio, ProjectMediaService media) : PageModel
 {
     public Project Project { get; private set; } = new();
+    public ProjectMedia Media { get; private set; } = new(ProjectMediaKind.Image);
     public IReadOnlyList<ProjectImage> Screenshots { get; private set; } = [];
     public IReadOnlyList<DetailBlock> Sections { get; private set; } = [];
 
@@ -17,8 +18,8 @@ public sealed class DetailModel(IPortfolioDataService portfolio, ProjectMediaSer
         if (project is null) return NotFound();
 
         Project = project;
-        var screenshots = media.GetScreenshots(project);
-        Screenshots = screenshots.Count > 0 ? screenshots : [media.GetFallbackImage(project)];
+        Media = media.GetPrimaryMedia(project);
+        Screenshots = media.GetScreenshots(project);
         Sections = BuildSections(project);
 
         ViewData["Meta"] = new PageMeta
