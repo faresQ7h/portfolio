@@ -31,7 +31,7 @@ const setupThemeToggle = () => {
     root.dataset.theme = next;
     syncThemeColor(next);
     try {
-      localStorage.setItem("theme", next);
+      localStorage.setItem("faresm-theme", next);
     } catch (error) {
       // storage unavailable: the choice still applies for this page view
     }
@@ -211,14 +211,15 @@ const setupHeroGlow = () => {
   hero.addEventListener("pointerleave", () => hero.classList.remove("is-glowing"));
 };
 
-// From the About section down, a gold trace grows along the left margin as the page scrolls,
-// like a `git log --graph` line: each section's kicker is a node that lights up (with a short
-// branch toward the heading) once the trace reaches it. Decorative only, drawn from the real
-// section positions, and fully drawn without motion when reduced motion is requested.
+// From the About section down, a faint gold trace grows behind the content as the page scrolls:
+// straight down (|), a 45° step (\), and at every section divider a horizontal run (_) along the
+// divider to a new column, like a routed circuit trace. It is drawn from the real section
+// positions, sits behind the text at low opacity, and is fully drawn without motion when reduced
+// motion is requested.
 const setupScrollTrace = () => {
   const main = select("[data-trace]");
-  const anchors = selectAll("[data-trace-node]");
-  if (!main || anchors.length < 2 || !("ResizeObserver" in window)) return;
+  const sections = selectAll("[data-trace] > section:not(.hero)");
+  if (!main || sections.length < 2 || !("ResizeObserver" in window)) return;
 
   const SVG_NS = "http://www.w3.org/2000/svg";
   const make = (name, attributes = {}) => {
@@ -228,95 +229,116 @@ const setupScrollTrace = () => {
   };
 
   const svg = make("svg", { class: "scroll-trace", "aria-hidden": "true", focusable: "false" });
-  const track = make("line", { class: "trace-track" });
-  const glow = make("line", { class: "trace-glow" });
-  const progress = make("line", { class: "trace-progress" });
-  const head = make("circle", { class: "trace-head", r: "3.5" });
-  const nodes = anchors.map(() => ({
-    branch: make("line", { class: "trace-branch" }),
-    dot: make("circle", { class: "trace-node", r: "4.5" })
-  }));
-  svg.append(track, glow, progress, ...nodes.flatMap((node) => [node.branch, node.dot]), head);
+  const path = make("path", { class: "trace-path" });
+  const tip = make("circle", { class: "trace-tip", r: "2.5" });
+  svg.append(path, tip);
   main.prepend(svg);
 
+  // column for each section, as a fraction of the content width (alternating across the page)
+  const COLUMNS = [0.06, 0.64, 0.24, 0.82, 0.4, 0.7];
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let vias = [];
   let geometry = null;
   let frame = 0;
 
-  // offsetLeft/offsetTop ignore transforms, so sections still sliding in (reveal) don't skew the layout
-  const offsetWithin = (element, ancestor) => {
-    let x = 0;
-    let y = 0;
-    for (let node = element; node && node !== ancestor; node = node.offsetParent) {
-      x += node.offsetLeft;
-      y += node.offsetTop;
-    }
-    return { x, y };
-  };
-
-  const setLine = (line, x1, y1, x2, y2) => {
-    line.setAttribute("x1", x1);
-    line.setAttribute("y1", y1);
-    line.setAttribute("x2", x2);
-    line.setAttribute("y2", y2);
-  };
-
   const layout = () => {
-    svg.setAttribute("viewBox", `0 0 ${main.offsetWidth} ${main.offsetHeight}`);
+    const width = main.offsetWidth;
+    svg.setAttribute("viewBox", `0 0 ${width} ${main.offsetHeight}`);
 
-    const points = anchors.map((anchor) => {
-      const offset = offsetWithin(anchor, main);
-      return { left: offset.x, y: offset.y + anchor.offsetHeight / 2 };
-    });
-    const contentLeft = points[0].left;
-    const x = Math.round(Math.max(contentLeft - 36, contentLeft / 2));
-    const top = points[0].y;
-    const length = points[points.length - 1].y - top;
+    const content = select("[data-trace] > section:not(.hero) .container");
+    const left = content.offsetLeft;
+    const span = content.offsetWidth;
+    const step = Math.round(Math.min(span * 0.1, 120));
 
-    [track, glow, progress].forEach((line) => setLine(line, x, top, x, top + length));
-    [glow, progress].forEach((line) => { line.style.strokeDasharray = `${length} ${length}`; });
+    // Each segment knows the scroll "reach" range over which it draws. Vertical and diagonal runs
+    // draw as the reach passes their own y-range; each horizontal run draws within a short band
+    // around its divider, so the tip stays close to the reading position.
+    const points = [];
+    const segments = [];
+    let x = Math.max(8, left - 24);
+    let y = sections[0].offsetTop;
+    points.push([x, y]);
 
-    points.forEach((point, index) => {
-      const { branch, dot } = nodes[index];
-      dot.setAttribute("cx", x);
-      dot.setAttribute("cy", point.y);
-      const branchLength = Math.max(0, point.left - 12 - (x + 8));
-      setLine(branch, x + 8, point.y, x + 8 + branchLength, point.y);
-      branch.style.setProperty("--branch-length", branchLength);
-      branch.style.display = branchLength < 8 ? "none" : "";
-    });
-    head.setAttribute("cx", x);
-
-    geometry = {
-      top,
-      length,
-      mainTop: main.getBoundingClientRect().top + window.scrollY,
-      nodeYs: points.map((point) => point.y)
+    const lineTo = (nextX, nextY, reachFrom, reachTo) => {
+      const length = Math.hypot(nextX - x, nextY - y);
+      if (length < 0.5) return;
+      segments.push({ length, reachFrom, reachTo });
+      x = nextX;
+      y = nextY;
+      points.push([x, y]);
     };
+
+    const viaPoints = [];
+    sections.forEach((section, index) => {
+      const top = section.offsetTop;
+      const bottom = index < sections.length - 1 ? sections[index + 1].offsetTop : top + section.offsetHeight - 48;
+      const column = Math.round(left + COLUMNS[index % COLUMNS.length] * span);
+      const band = Math.min(140, Math.abs(column - x) * 0.4);
+
+      // _ along the divider to this section's column
+      lineTo(column, top, top - band / 2, top + band / 2);
+      viaPoints.push({ x: column, y: top });
+
+      // | then \ then | down to the next divider
+      const height = bottom - top;
+      const bend = top + Math.max(height * 0.32, 24);
+      const diagonal = Math.min(step, Math.max(0, (height - 48) / 2));
+      lineTo(column, bend, top + band / 2, bend);
+      lineTo(column + diagonal, bend + diagonal, bend, bend + diagonal);
+      lineTo(column + diagonal, bottom, bend + diagonal, bottom);
+    });
+
+    // keep each segment's reach range ordered even where bands overlap neighbours
+    let floor = -Infinity;
+    segments.forEach((segment) => {
+      segment.reachFrom = Math.max(segment.reachFrom, floor);
+      segment.reachTo = Math.max(segment.reachTo, segment.reachFrom + 1);
+      floor = segment.reachTo;
+    });
+
+    path.setAttribute("d", points.map(([px, py], i) => `${i ? "L" : "M"}${px} ${py}`).join(" "));
+    const total = segments.reduce((sum, segment) => sum + segment.length, 0);
+    path.style.strokeDasharray = `${total} ${total}`;
+
+    vias.forEach((via) => via.element.remove());
+    vias = viaPoints.map((point) => {
+      const via = make("circle", { class: "trace-via", cx: point.x, cy: point.y, r: "2.5" });
+      svg.insertBefore(via, tip);
+      return { element: via, y: point.y };
+    });
+
+    geometry = { segments, total, mainTop: main.getBoundingClientRect().top + window.scrollY };
   };
 
   const update = () => {
     frame = 0;
     if (!geometry) return;
 
-    // The trace tip follows a point 60% of the way down the viewport; during the last screen of
+    // The tip follows a point 60% of the way down the viewport; during the last screen of
     // scrolling that point slides to the bottom edge, so the trace is complete at the page end.
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     const nearEnd = Math.min(Math.max((window.scrollY - (maxScroll - window.innerHeight)) / window.innerHeight, 0), 1);
-    const viewportFraction = 0.6 + 0.4 * nearEnd;
     const reach = reducedMotion.matches
       ? Infinity
-      : window.scrollY + window.innerHeight * viewportFraction - geometry.mainTop;
-    const drawn = Math.min(Math.max(reach - geometry.top, 0), geometry.length);
+      : window.scrollY + window.innerHeight * (0.6 + 0.4 * nearEnd) - geometry.mainTop;
 
-    [glow, progress].forEach((line) => { line.style.strokeDashoffset = geometry.length - drawn; });
-    head.setAttribute("cy", geometry.top + drawn);
-    head.classList.toggle("is-visible", drawn > 0 && drawn < geometry.length);
-    geometry.nodeYs.forEach((y, index) => {
-      const reached = reach >= y - 1;
-      nodes[index].dot.classList.toggle("is-reached", reached);
-      nodes[index].branch.classList.toggle("is-reached", reached);
-    });
+    let drawn = 0;
+    for (const segment of geometry.segments) {
+      const t = Math.min(Math.max((reach - segment.reachFrom) / (segment.reachTo - segment.reachFrom), 0), 1);
+      drawn += segment.length * t;
+      if (t < 1) break;
+    }
+
+    path.style.strokeDashoffset = geometry.total - drawn;
+    if (drawn > 0 && drawn < geometry.total) {
+      const point = path.getPointAtLength(drawn);
+      tip.setAttribute("cx", point.x);
+      tip.setAttribute("cy", point.y);
+      tip.classList.add("is-visible");
+    } else {
+      tip.classList.remove("is-visible");
+    }
+    vias.forEach((via) => via.element.classList.toggle("is-reached", reach >= via.y));
   };
 
   const queueUpdate = () => {

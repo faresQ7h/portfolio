@@ -338,15 +338,25 @@ public sealed class ContentTests(WebApplicationFactory<Program> factory) : IClas
     }
 
     [Fact]
-    public async Task Scroll_trace_has_a_node_for_every_section_after_the_hero()
+    public async Task Scroll_trace_is_anchored_on_main_with_the_sections_after_the_hero()
     {
         var html = await client.GetStringAsync("/");
 
         Assert.Contains("<main id=\"main\" data-trace>", html);
         foreach (var section in new[] { "about", "skills", "projects", "education", "learning", "contact" })
         {
-            Assert.Contains($"<p class=\"kicker\" data-trace-node>// {section}</p>", html);
+            Assert.Contains($"id=\"{section}\"", html);
         }
+    }
+
+    [Fact]
+    public async Task Theme_choice_uses_a_fresh_storage_key()
+    {
+        var html = await client.GetStringAsync("/");
+
+        // choices saved under the old "theme" key while testing earlier builds no longer apply
+        Assert.Contains("localStorage.getItem(\"faresm-theme\")", html);
+        Assert.DoesNotContain("localStorage.getItem(\"theme\")", html);
     }
 
     [Fact]

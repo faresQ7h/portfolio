@@ -53,7 +53,7 @@
   <script>
     document.documentElement.classList.add("js");
     try {
-      const theme = localStorage.getItem("theme");
+      const theme = localStorage.getItem("faresm-theme");
       if (theme === "light" || theme === "dark") {
         document.documentElement.dataset.theme = theme;
         const color = theme === "dark" ? "#0c0f14" : "#f7f7f5";

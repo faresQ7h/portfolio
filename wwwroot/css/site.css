@@ -1432,6 +1432,7 @@ main[data-trace] {
   isolation: isolate;
 }
 
+/* behind all section content; cards, terminals and diagrams sit in front of it */
 .scroll-trace {
   position: absolute;
   inset: 0;
@@ -1442,57 +1443,33 @@ main[data-trace] {
   pointer-events: none;
 }
 
-.trace-track {
-  stroke: var(--line);
+.trace-path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-opacity: 0.26;
   stroke-width: 1.5;
-}
-
-.trace-glow {
-  stroke: var(--accent);
-  stroke-width: 7;
-  stroke-linecap: round;
-  opacity: 0.16;
-}
-
-.trace-progress {
-  stroke: var(--accent);
-  stroke-width: 2;
+  stroke-linejoin: round;
   stroke-linecap: round;
 }
 
-.trace-branch {
-  stroke: var(--accent);
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-dasharray: var(--branch-length);
-  stroke-dashoffset: var(--branch-length);
-  transition: stroke-dashoffset 450ms ease;
-}
-
-.trace-branch.is-reached {
-  stroke-dashoffset: 0;
-}
-
-.trace-node {
-  fill: var(--bg);
-  stroke: var(--line-strong);
-  stroke-width: 1.5;
-  transition: fill 300ms ease, stroke 300ms ease;
-}
-
-.trace-node.is-reached {
+.trace-via {
   fill: var(--accent);
-  stroke: var(--accent);
+  fill-opacity: 0;
+  transition: fill-opacity 300ms ease;
 }
 
-.trace-head {
+.trace-via.is-reached {
+  fill-opacity: 0.4;
+}
+
+.trace-tip {
   fill: var(--accent);
   opacity: 0;
   transition: opacity 200ms ease;
 }
 
-.trace-head.is-visible {
-  opacity: 1;
+.trace-tip.is-visible {
+  opacity: 0.6;
 }
 
 @media print {
