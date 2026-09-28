@@ -1,8 +1,8 @@
 /* ==========================================================================
    faresm.dev: "Graphite & Amber"
    Inter for reading, JetBrains Mono for what a terminal would print.
-   Dark is the default; the light palette applies when the visitor's system
-   prefers light (and no explicit choice is stored) or when they pick it.
+   Dark ("night") is the default for every visitor; the light palette applies
+   only when they pick it with the header toggle.
    ========================================================================== */
 
 @font-face {
@@ -54,23 +54,6 @@
   --container: 1160px;
   --gutter: clamp(20px, 4vw, 48px);
   --header-height: 64px;
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    color-scheme: light;
-    --bg: #f7f7f5;
-    --surface: #ffffff;
-    --surface-2: #efefec;
-    --line: #deddd8;
-    --line-strong: #c4c2bb;
-    --text: #161a20;
-    --muted: #4a5361;
-    --subtle: #5d6674;
-    --accent: #8f5c00;
-    --on-accent: #ffffff;
-    --header-bg: rgba(247, 247, 245, 0.88);
-  }
 }
 
 :root[data-theme="light"] {
@@ -1440,6 +1423,82 @@ dd {
 .detail-block p,
 .detail-block ul {
   color: var(--muted);
+}
+
+/* ---------- scroll trace (drawn by site.js from About down) ---------- */
+
+main[data-trace] {
+  position: relative;
+  isolation: isolate;
+}
+
+.scroll-trace {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.trace-track {
+  stroke: var(--line);
+  stroke-width: 1.5;
+}
+
+.trace-glow {
+  stroke: var(--accent);
+  stroke-width: 7;
+  stroke-linecap: round;
+  opacity: 0.16;
+}
+
+.trace-progress {
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.trace-branch {
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: var(--branch-length);
+  stroke-dashoffset: var(--branch-length);
+  transition: stroke-dashoffset 450ms ease;
+}
+
+.trace-branch.is-reached {
+  stroke-dashoffset: 0;
+}
+
+.trace-node {
+  fill: var(--bg);
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
+  transition: fill 300ms ease, stroke 300ms ease;
+}
+
+.trace-node.is-reached {
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+
+.trace-head {
+  fill: var(--accent);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.trace-head.is-visible {
+  opacity: 1;
+}
+
+@media print {
+  .scroll-trace {
+    display: none;
+  }
 }
 
 /* ---------- motion ---------- */

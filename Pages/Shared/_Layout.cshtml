@@ -40,8 +40,7 @@
   {
   <meta name="twitter:image" content="@meta.OgImage">
   }
-  <meta name="theme-color" content="#0c0f14" media="(prefers-color-scheme: dark)">
-  <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0c0f14">
   @if (meta.CanonicalUrl is not null)
   {
   <link rel="canonical" href="@meta.CanonicalUrl">
@@ -49,7 +48,7 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
-  @* Apply a saved theme choice before first paint; without one, CSS follows prefers-color-scheme.
+  @* Apply a saved theme choice before first paint; without one, the dark theme applies.
      The "js" class lets CSS collapse the mobile menu only when the script that opens it can run. *@
   <script>
     document.documentElement.classList.add("js");

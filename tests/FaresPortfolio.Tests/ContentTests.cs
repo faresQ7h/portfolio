@@ -325,4 +325,35 @@ public sealed class ContentTests(WebApplicationFactory<Program> factory) : IClas
         Assert.DoesNotContain("quickest way to reach me", html);
         Assert.DoesNotContain("Each skill links to", html);
     }
+
+    [Fact]
+    public async Task Dark_is_the_default_theme_regardless_of_system_setting()
+    {
+        var html = await client.GetStringAsync("/");
+        var css = await client.GetStringAsync("/css/site.css");
+
+        Assert.DoesNotContain("prefers-color-scheme", css);
+        Assert.Contains(":root[data-theme=\"light\"]", css);
+        Assert.Contains("<meta name=\"theme-color\" content=\"#0c0f14\">", html);
+    }
+
+    [Fact]
+    public async Task Scroll_trace_has_a_node_for_every_section_after_the_hero()
+    {
+        var html = await client.GetStringAsync("/");
+
+        Assert.Contains("<main id=\"main\" data-trace>", html);
+        foreach (var section in new[] { "about", "skills", "projects", "education", "learning", "contact" })
+        {
+            Assert.Contains($"<p class=\"kicker\" data-trace-node>// {section}</p>", html);
+        }
+    }
+
+    [Fact]
+    public async Task Hero_email_button_has_an_icon()
+    {
+        var html = await client.GetStringAsync("/");
+
+        Assert.Contains("<svg class=\"icon\" aria-hidden=\"true\" focusable=\"false\"><use href=\"#icon-mail\"></use></svg>Email</a>", html);
+    }
 }
